@@ -2,547 +2,705 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZapFácil Lite - Emissor Rápido - Sistema de Mensagens</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ZapFácil Lite - Emissor Rápido</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
-
-        body {
-            background-color: #030712;
-            color: #f3f4f6;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .auth-card {
-            background-color: #0b0f19;
-            border: 1px solid #1f2937;
-            border-radius: 20px;
-            padding: 35px;
-            width: 100%;
-            max-width: 420px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
-            text-align: center;
-        }
-
-        .badge-version {
-            display: inline-block;
-            background-color: rgba(6, 182, 212, 0.1);
-            color: #06b6d4;
-            padding: 6px 14px;
-            border-radius: 30px;
-            font-size: 11px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 15px;
-            border: 1px solid rgba(6, 182, 212, 0.2);
-        }
-
-        h2 {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: #ffffff;
-        }
-
-        h2 span {
-            color: #06b6d4;
-        }
-
-        p.subtitle {
-            font-size: 13px;
-            color: #9ca3af;
-            margin-bottom: 25px;
-            line-height: 1.5;
-        }
-
-        .form-group {
-            text-align: left;
-            margin-bottom: 18px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 11px;
-            font-weight: 600;
-            color: #9ca3af;
-            text-transform: uppercase;
-            margin-bottom: 6px;
-            letter-spacing: 0.5px;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 13px 16px;
-            background-color: #111827;
-            border: 1px solid #374151;
-            border-radius: 12px;
-            color: #ffffff;
-            font-size: 14px;
-            outline: none;
-            transition: all 0.2s;
-        }
-
-        .form-group input:focus {
-            border-color: #06b6d4;
-            box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.15);
-        }
-
-        .btn-action {
-            width: 100%;
-            background-color: #06b6d4;
-            color: #ffffff;
-            border: none;
-            padding: 14px;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            cursor: pointer;
-            transition: all 0.2s;
-            margin-top: 5px;
-        }
-
-        .btn-action:hover {
-            background-color: #0891b2;
-            transform: translateY(-1px);
-        }
-
-        .btn-action:active {
-            transform: translateY(0);
-        }
-
-        .auth-links {
-            margin-top: 20px;
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            font-size: 12px;
-        }
-
-        .auth-links a {
-            color: #9ca3af;
-            text-decoration: none;
-            transition: color 0.2s;
-            cursor: pointer;
-        }
-
-        .auth-links a:hover {
-            color: #06b6d4;
-            text-decoration: underline;
-        }
-
-        /* INTERFACE DO APLICATIVO APÓS LOGAR */
-        #telaAppPrincipal {
-            width: 100%;
-            max-width: 1000px;
-            background-color: #0b0f19;
-            border: 1px solid #1f2937;
-            border-radius: 24px;
-            padding: 40px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            display: none;
-            animation: fadeIn 0.4s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .app-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #1f2937;
-            padding-bottom: 20px;
-            margin-bottom: 30px;
-        }
-
-        .user-badge {
-            background-color: #111827;
-            border: 1px solid #374151;
-            padding: 8px 16px;
-            border-radius: 12px;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-logout {
-            background-color: rgba(239, 68, 68, 0.1);
-            color: #ef4444;
-            border: 1px solid rgba(239, 68, 68, 0.2);
-            padding: 8px 16px;
-            border-radius: 10px;
-            font-size: 12px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-logout:hover {
-            background-color: #ef4444;
-            color: white;
-        }
-
-        .demo-content {
-            background-color: #111827;
-            border: 1px solid #1f2937;
-            border-radius: 16px;
-            padding: 40px;
-            text-align: center;
-            color: #9ca3af;
-        }
-
-        .license-footer {
-            margin-top: 30px;
-            font-size: 11px;
-            color: #6b7280;
-            display: flex;
-            justify-content: space-between;
-            background-color: rgba(17, 24, 39, 0.5);
-            padding: 12px 20px;
-            border-radius: 10px;
-        }
-
-        .screen {
-            display: none;
-        }
-
-        .active-screen {
-            display: block !important;
+        .quebra-texto-cupom { white-space: normal !important; word-break: break-word !important; }
+        #bloqueioAssinatura {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.99); z-index: 99999; color: white;
+            align-items: center; justify-content: center; flex-direction: column; padding: 20px; text-align: center;
         }
     </style>
 </head>
-<body>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col justify-center items-center p-4 antialiased">
 
-    <!-- CARD COLETIVO DE AUTENTICAÇÃO -->
-    <div id="containerAutenticacao" class="auth-card screen active-screen">
-        
-        <!-- TELA 1: ATIVAÇÃO DE LICENÇA (PRIMEIRO ACESSO) -->
-        <div id="telaAtivacao" class="screen">
-            <div class="badge-version">⚡ Versão Lite</div>
-            <h2>Ative seu <span>Sistema</span></h2>
-            <p class="subtitle">Insira a chave de ativação fornecida pelo administrador para liberar seu acesso comercial.</p>
-            
-            <div class="form-group">
-                <label>Chave de Ativação (Base64)</label>
-                <input id="inputChave" type="text" placeholder="ZAPFACIL-..." autocomplete="off">
-            </div>
-            
-            <button onclick="processarAtivacao()" class="btn-action">⚡ Validar Licença</button>
+    <!-- BLOQUEIO DE MENSALIDADE ORIGINAL -->
+    <div id="bloqueioAssinatura">
+        <div class="max-w-xs p-5 bg-slate-900 rounded-xl border border-red-500/40 shadow-xl space-y-3">
+            <span class="text-4xl">🔒</span>
+            <h1 class="text-base font-bold text-red-400 uppercase">Sistema Suspenso</h1>
+            <p class="text-xs text-gray-400">Entre em contato para renovar seu plano mensal de R$ 20,00.</p>
+            <input id="inputChaveRenovacao" type="text" placeholder="Chave de Ativação" class="w-full text-center p-2 rounded bg-slate-800 text-white border border-gray-700 text-xs font-mono outline-none">
+            <button onclick="salvarNovaChave()" class="w-full bg-blue-600 font-bold py-2 rounded text-xs">Ativar</button>
         </div>
-
-        <!-- TELA 2: CRIAÇÃO DE CONTA LOCAL -->
-        <div id="telaCadastro" class="screen">
-            <div class="badge-version">⚡ Versão Lite</div>
-            <h2>Criar seu <span>Acesso</span></h2>
-            <p class="subtitle">Licença aceita! Configure um usuário e senha rápidos para não precisar usar aquela chave grande sempre.</p>
-            
-            <div class="form-group">
-                <label>Nome de Usuário ou E-mail</label>
-                <input id="regUser" type="text" placeholder="Ex: cliente_zap">
-            </div>
-            <div class="form-group">
-                <label>Sua Senha</label>
-                <input id="regPass" type="password" placeholder="Mínimo 4 caracteres">
-            </div>
-            <div class="form-group">
-                <label>Confirmar Senha</label>
-                <input id="regPassConf" type="password" placeholder="Repita a senha">
-            </div>
-            
-            <button onclick="processarCadastro()" class="btn-action">💾 Salvar e Entrar</button>
-        </div>
-
-        <!-- TELA 3: LOGIN DIÁRIO -->
-        <div id="telaLoginCliente" class="screen">
-            <div class="badge-version">⚡ Versão Lite</div>
-            <h2>Acessar <span>Painel</span></h2>
-            <p class="subtitle">Insira suas credenciais locais para entrar na sua ferramenta automatizada.</p>
-            
-            <div class="form-group">
-                <label>Usuário ou E-mail</label>
-                <input id="loginUser" type="text" placeholder="Digite seu usuário..." onkeydown="if(event.key === 'Enter') processarLogin()">
-            </div>
-            <div class="form-group">
-                <label>Senha de Acesso</label>
-                <input id="loginPass" type="password" placeholder="Digite sua senha..." onkeydown="if(event.key === 'Enter') processarLogin()">
-            </div>
-            
-            <button onclick="processarLogin()" class="btn-action">🔓 Entrar no Sistema</button>
-            
-            <div class="auth-links">
-                <a onclick="irParaTelaRescue()">Esqueci minha conta / senha</a>
-            </div>
-        </div>
-
-        <!-- TELA 4: RECUPERAÇÃO DE ACESSO -->
-        <div id="telaRescue" class="screen">
-            <div class="badge-version">Recuperação</div>
-            <h2>Resgatar <span>Acesso</span></h2>
-            <p class="subtitle">Esqueceu sua senha? Cole sua Chave de Ativação original abaixo para redefinir suas credenciais.</p>
-            
-            <div class="form-group">
-                <label>Chave de Ativação Original</label>
-                <input id="rescueChave" type="text" placeholder="Insira seu código Base64...">
-            </div>
-            
-            <button onclick="validarChaveRescue()" class="btn-action">🔍 Verificar Chave</button>
-            
-            <!-- Bloco oculto de redefinição -->
-            <div id="boxRedefinir" style="display: none; margin-top: 20px; border-top: 1px solid #1f2937; padding-top: 20px;">
-                <p id="lblUsuarioIdentificado" style="font-size: 13px; color: #06b6d4; font-weight: bold; margin-bottom: 15px;"></p>
-                <div class="form-group">
-                    <label>Nova Senha</label>
-                    <input id="rescueNovaSenha" type="password" placeholder="Digite a nova senha">
-                </div>
-                <button onclick="salvarNovaSenhaResgatada()" class="btn-action" style="background-color: #059669;">🔄 Alterar Senha</button>
-            </div>
-
-            <div class="auth-links">
-                <a onclick="verificarEstadoAcesso()">⬅️ Voltar para o Login</a>
-            </div>
-        </div>
-
     </div>
 
-    <!-- 5. TELA REAL DO APLICATIVO (LIBERADO) -->
-    <div id="telaAppPrincipal">
-        <div class="app-header">
+    <!-- 1. TELA DE LOGIN PROTEGIDA -->
+    <div id="areaLogin" class="w-full max-w-md p-6 bg-slate-900 rounded-2xl border border-slate-800 shadow-2xl space-y-4">
+        <div class="text-center">
+            <h1 class="text-2xl font-black text-white tracking-wide">⚡ ZapFácil Lite</h1>
+            <p class="text-xs text-slate-400 mt-1">Insira suas credenciais para acessar o emissor</p>
+        </div>
+        <div class="space-y-3">
             <div>
-                <h2 style="font-size: 20px;">ZapFácil Lite - Emissor Rápido <span>Ativo</span></h2>
-                <p style="font-size: 12px; color: #9ca3af; margin-top: 2px;">Sistema operando normalmente</p>
+                <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">E-mail de Acesso</label>
+                <input id="loginEmail" type="email" placeholder="seuemail@gmail.com" class="w-full p-2.5 rounded-lg bg-slate-800 text-white border border-slate-700 text-sm outline-none focus:border-emerald-500">
             </div>
-            <div style="display: flex; align-items: center; gap: 15px;">
-                <div class="user-badge">
-                    <span>👤</span> <strong id="lblNomeUsuario" style="color: #ffffff;">admin</strong>
+            <div>
+                <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Senha</label>
+                <input id="loginSenha" type="password" placeholder="••••••••" class="w-full p-2.5 rounded-lg bg-slate-800 text-white border border-slate-700 text-sm outline-none focus:border-emerald-500">
+            </div>
+            <button onclick="executarLogin()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-lg text-xs uppercase tracking-wider transition-all shadow-lg">Entrar no Sistema</button>
+        </div>
+    </div>
+
+    <!-- 2. ÁREA PROTEGIDA DO SISTEMA -->
+    <div id="areaSistema" class="w-full max-w-6xl space-y-4 hidden">
+        
+        <!-- Topo Administrativo de Login/Logout -->
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-4 bg-slate-900 p-4 rounded-xl border border-slate-800 shadow-md">
+            <div>
+                <h1 class="text-base font-bold text-white flex items-center gap-2">
+                    ZapFácil Lite - Emissor Rápido <span class="text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 font-medium">Ativo</span>
+                </h1>
+                <p class="text-xs text-slate-400 mt-0.5">Sistema operando normalmente</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <div class="bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 flex items-center gap-2 text-xs font-medium text-slate-200">
+                    <span>👤</span>
+                    <span id="labelUsuarioEmail">...</span>
                 </div>
-                <button onclick="fazerLogoutCliente()" class="btn-logout">🚪 Desconectar</button>
+                <button onclick="executarLogout()" class="bg-red-950/40 hover:bg-red-950/60 text-red-400 border border-red-900/50 px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 transition-all">
+                    Desconectar
+                </button>
             </div>
         </div>
 
-        <!-- CONTEÚDO SIMULADO DO SEU ROBÔ / EXTENSÃO -->
-        <div class="demo-content">
-            <div style="font-size: 48px; margin-bottom: 15px;">🚀</div>
-            <h3 style="color: #ffffff; margin-bottom: 10px; font-size: 18px;">Seu Robô Comercial está Pronto para Rodar!</h3>
-            <p style="font-size: 13px; max-width: 500px; margin: 0 auto; line-height: 1.6;">Aqui dentro fica toda a lógica da sua extensão ou automação do WhatsApp. O sistema de proteção bloqueou tudo com segurança até este momento.</p>
-        </div>
+        <!-- SEU SISTEMA ORIGINAL COMPLETO (PRESERVADO) -->
+        <div class="bg-slate-50 text-slate-800 rounded-2xl p-4 md:p-6 shadow-xl border border-slate-200">
+            <header class="bg-slate-800 text-white py-3 px-4 shadow-sm text-center sticky top-0 z-50 rounded-xl mb-4">
+                <h1 class="text-base font-bold flex justify-center items-center gap-1">⚡ ZapFácil Lite</h1>
+                <p id="labelValidadeLicenca" class="text-[8px] text-slate-400 font-mono uppercase tracking-wide"></p>
+            </header>
 
-        <div class="license-footer">
-            <div>🔒 Dispositivo Licenciado Seguramente</div>
-            <div>📅 Vencimento da Licença: <strong id="lblDataVencimento" style="color: #ffffff;">--/--/----</strong></div>
+            <main class="max-w-5xl mx-auto w-full grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+                <div class="space-y-3 w-full">
+                    <section class="bg-white p-4 rounded-xl shadow-sm border space-y-3">
+                        <h2 class="text-xs font-bold text-slate-700 uppercase tracking-wide border-b pb-1">🏢 Seus Dados</h2>
+                        <div class="grid grid-cols-2 gap-2">
+                            <label class="bg-slate-100 text-slate-700 text-center text-[10px] font-bold p-1.5 rounded cursor-pointer border">
+                                📁 Logo
+                                <input type="file" accept="image/*" onchange="processarLogoLite(this)" class="hidden">
+                            </label>
+                            <button onclick="removerLogoLite()" id="btnRemoverLogo" class="bg-red-50 text-red-500 text-[10px] p-1.5 rounded border border-red-100 hidden">✕ Remover</button>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input id="nomeEmpresa" type="text" placeholder="Seu Negócio" class="w-full text-xs px-2.5 py-2 rounded border outline-none">
+                            <input id="telefoneEmpresa" type="text" placeholder="Telefone" class="w-full text-xs px-2.5 py-2 rounded border outline-none">
+                        </div>
+
+                        <div class="pt-2 border-t space-y-2">
+                            <div class="flex gap-1">
+                                <select id="tipoChavePixLite" class="text-[11px] p-1 border bg-white font-bold w-16 outline-none">
+                                    <option value="CPF">CPF</option>
+                                    <option value="Celular">Tel</option>
+                                    <option value="Aleatória">Chave</option>
+                                </select>
+                                <input id="novaChavePixTxt" type="text" placeholder="Sua Chave Pix..." class="flex-grow text-xs px-2 py-1 border outline-none">
+                                <button onclick="adicionarChavePixLiteColetor()" class="bg-slate-700 text-white px-2 rounded text-xs">➕</button>
+                            </div>
+                            <select id="selectChavesPixSalvas" onchange="alternarChavePixLiteAtiva()" class="w-full text-xs p-1.5 border bg-white"></select>
+                        </div>
+                    </section>
+
+                    <section class="bg-white p-4 rounded-xl shadow-sm border space-y-3">
+                        <h2 class="text-xs font-bold text-slate-700 uppercase tracking-wide border-b pb-1">📝 Dados do Pedido</h2>
+                        <input id="nomeCliente" type="text" placeholder="Nome do Cliente" class="w-full text-xs px-3 py-2.5 rounded border outline-none">
+                        <textarea id="nomeProduto" rows="2" placeholder="O que foi vendido? (Texto Livre)" class="w-full text-xs px-3 py-2 rounded border outline-none"></textarea>
+                        
+                        <div class="grid grid-cols-2 gap-2">
+                            <input id="valorProduto" type="number" step="0.01" placeholder="Valor R$" class="w-full text-xs px-3 py-2.5 rounded border font-bold outline-none">
+                            <select id="formaPagamento" class="w-full text-xs px-3 py-2.5 rounded border bg-white outline-none">
+                                <option value="PIX">PIX</option>
+                                <option value="DINHEIRO">Dinheiro</option>
+                                <option value="CARTÃO">Cartão</option>
+                            </select>
+                        </div>
+                        <select id="statusPagamento" class="w-full text-xs px-3 py-2.5 rounded border font-bold bg-white text-center outline-none">
+                            <option value="PAGO">🟢 RECEBIDO (Comprovante)</option>
+                            <option value="PENDENTE">🟡 EM ABERTO (Fatura)</option>
+                        </select>
+
+                        <button onclick="processarLite()" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 px-4 rounded-lg text-xs uppercase tracking-wider transition-all">
+                            ⚡ GERAR COMPROVANTE
+                        </button>
+                    </section>
+                </div>
+
+                <div class="flex flex-col items-center space-y-3 w-full">
+                    <div id="cupomContainer" class="bg-white p-4 shadow border border-slate-300 w-full max-w-[320px] text-slate-800 font-mono text-[11px] uppercase relative leading-relaxed text-left">
+                        <div id="cupomBadge" class="text-center font-sans font-black text-[10px] py-0.5 rounded mb-3 text-white bg-slate-700">COMPROVANTE DE PAGAMENTO</div>
+                        <div id="cupomLogoContainer" class="hidden justify-center items-center w-full mb-2"><img id="cupomLogo" src="" class="max-h-12 max-w-[130px] object-contain mx-auto block"></div>
+                        <div id="cupomEmpresa" class="font-bold text-center text-xs">EMISSOR LITE</div>
+                        <div id="cupomTelefone" class="text-center text-[9px] text-slate-500 hidden"></div>
+                        <div class="border-b border-dashed border-slate-400 my-1.5"></div>
+                        <div class="flex justify-between text-[9px] text-slate-500"><span id="cupomData">DATA: --/--/----</span><span id="cupomHora">HORA: --:--</span></div>
+                        <div class="border-b border-dashed border-slate-400 my-1.5"></div>
+                        <div class="text-[9px] text-slate-400">CLIENTE:</div>
+                        <div id="cupomCliente" class="font-bold text-slate-900 max-w-full quebra-texto-cupom">CONSUMIDOR</div>
+                        <div class="border-b border-dashed border-slate-400 my-1.5"></div>
+                        
+                        <div class="flex justify-between font-bold mb-1"><span>ITEM</span><span class="text-right">VALOR</span></div>
+                        <div class="flex justify-between gap-4 items-start">
+                            <span id="cupomProduto" class="quebra-texto-cupom text-slate-700 font-medium">NENHUM LANÇADO</span>
+                            <span id="cupomValor" class="font-bold whitespace-nowrap text-right">R$ 0,00</span>
+                        </div>
+                        
+                        <div class="border-b border-dashed border-slate-400 my-1.5"></div>
+                        <div class="flex justify-between text-slate-700"><span id="cupomForm">PAGAMENTO: -</span><span id="cupomValorForma">R$ 0,00</span></div>
+                        <div id="linhaCupomPix" class="bg-emerald-50 text-emerald-900 p-1.5 rounded border border-emerald-200 my-1 hidden text-[9px]">
+                            <span class="font-bold block text-[7px] text-emerald-700">PIX:</span>
+                            <span id="cupomChavePixTxt" class="font-mono break-all font-bold">--</span>
+                        </div>
+                        <div class="border-t border-dashed border-slate-300 my-1"></div>
+                        <div class="flex justify-between text-xs font-black text-slate-900"><span>TOTAL</span><span id="cupomTotal" class="text-sm">R$ 0,00</span></div>
+                        <div class="border-b border-dashed border-slate-400 my-1.5"></div>
+                        <div class="text-[9px] text-center text-slate-400 font-bold tracking-widest">*** OBRIGADO ***</div>
+                    </div>
+
+                    <div class="w-full max-w-[320px] space-y-2 px-1">
+                        <div id="containerPixExterno" class="bg-emerald-50 border border-emerald-200 rounded-xl p-2.5 text-center hidden">
+                            <span class="block text-[9px] font-bold text-emerald-700 mb-0.5">Pix para cópia:</span>
+                            <div id="txtPixExterno" class="bg-white border p-1 rounded text-xs font-mono break-all select-all font-bold text-slate-800 cursor-pointer"></div>
+                        </div>
+                        <button id="btnEnviar" onclick="enviarLite()" class="w-full bg-gray-300 text-gray-500 cursor-not-allowed font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider shadow" disabled>🚀 Enviar p/ WhatsApp</button>
+                    </div>
+                </div>
+            </main>
         </div>
     </div>
 
     <script>
-        const STORAGE_PREFIX = "z_lite" + "_";
-
-        document.addEventListener("DOMContentLoaded", function() {
-            verificarEstadoAcesso();
-        });
-
-        function ocultarTodasTelas() {
-            const telas = document.querySelectorAll('.screen');
-            telas.forEach(t => t.style.display = 'none');
-        }
-
-        function mostrarTela(id) {
-            document.getElementById(id).style.display = 'block';
-        }
-
-        function verificarEstadoAcesso() {
-            const ativado = localStorage.getItem(STORAGE_PREFIX + 'ativado');
-            const logado = sessionStorage.getItem(STORAGE_PREFIX + 'sessao_ativa');
-
-            ocultarTodasTelas();
-
-            if (!ativado) {
-                document.getElementById('containerAutenticacao').style.display = 'block';
-                mostrarTela('telaAtivacao');
-            } else {
-                const temConta = localStorage.getItem(STORAGE_PREFIX + 'usuario');
-                if (!temConta) {
-                    document.getElementById('containerAutenticacao').style.display = 'block';
-                    mostrarTela('telaCadastro');
-                } else if (logado === 'true') {
-                    if (verificarLicencaExpirada()) return;
-                    
-                    document.getElementById('containerAutenticacao').style.display = 'none';
-                    document.getElementById('telaAppPrincipal').style.display = 'block';
-                    
-                    document.getElementById('lblNomeUsuario').innerText = localStorage.getItem(STORAGE_PREFIX + 'usuario');
-                    document.getElementById('lblDataVencimento').innerText = localStorage.getItem(STORAGE_PREFIX + 'venc_visivel');
-                } else {
-                    document.getElementById('containerAutenticacao').style.display = 'block';
-                    mostrarTela('telaLoginCliente');
-                }
-            }
-        }
-
-        function verificarLicencaExpirada() {
-            const vencRaw = localStorage.getItem(STORAGE_PREFIX + 'venc_raw');
-            if (vencRaw) {
-                const ano = parseInt(vencRaw.substring(0, 4));
-                const mes = parseInt(vencRaw.substring(4, 6)) - 1;
-                const dia = parseInt(vencRaw.substring(6, 8));
-                
-                const dataVencObj = new Date(ano, mes, dia, 23, 59, 59);
-                const agora = new Date();
-                
-                if (dataVencObj < agora) {
-                    alert("Atenção: Sua licença de uso expirou! Por favor, fale com o suporte para renovar sua chave.");
-                    localStorage.removeItem(STORAGE_PREFIX + 'ativado');
-                    localStorage.removeItem(STORAGE_PREFIX + 'chave');
-                    localStorage.removeItem(STORAGE_PREFIX + 'venc_raw');
-                    localStorage.removeItem(STORAGE_PREFIX + 'venc_visivel');
-                    verificarEstadoAcesso();
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        function processarAtivacao() {
-            const chave = document.getElementById('inputChave').value.trim();
-            if (!chave) {
-                alert("Por favor, digite a chave de ativação!");
-                return;
-            }
-
-            try {
-                const stringDecodificada = atob(chave);
-                
-                if (!stringDecodificada.startsWith("ZAPFACIL-")) {
-                    alert("Esta chave não pertence ao ecossistema ZapFácil!");
-                    return;
-                }
-
-                const dataStr = stringDecodificada.substring(9, 17);
-                const ano = parseInt(dataStr.substring(0, 4));
-                const mes = parseInt(dataStr.substring(4, 6)) - 1;
-                const dia = parseInt(dataStr.substring(6, 8));
-
-                const dataVencObj = new Date(ano, mes, dia, 23, 59, 59);
-                const agora = new Date();
-
-                if (dataVencObj < agora) {
-                    alert("Não foi possível ativar: Esta chave já está expirada!");
-                    return;
-                }
-
-                const visualData = `${String(dia).padStart(2, '0')}/${String(mes + 1).padStart(2, '0')}/${ano}`;
-
-                localStorage.setItem(STORAGE_PREFIX + 'ativado', 'true');
-                localStorage.setItem(STORAGE_PREFIX + 'chave', chave);
-                localStorage.setItem(STORAGE_PREFIX + 'venc_raw', dataStr);
-                localStorage.setItem(STORAGE_PREFIX + 'venc_visivel', ano === 2099 ? "Vitalício" : visualData);
-
-                alert("🚀 Chave autenticada com absoluto sucesso!");
-                verificarEstadoAcesso();
-
-            } catch (error) {
-                alert("Erro de validação: O código inserido está corrompido ou é inválido!");
-            }
-        }
-
-        function processarCadastro() {
-            const user = document.getElementById('regUser').value.trim();
-            const pass = document.getElementById('regPass').value;
-            const passConf = document.getElementById('regPassConf').value;
-
-            if (!user || !pass) {
-                alert("Preencha todos os campos obrigatórios!");
-                return;
-            }
-            if (pass.length < 4) {
-                alert("A senha deve ter no mínimo 4 caracteres!");
-                return;
-            }
-            if (pass !== passConf) {
-                alert("As senhas digitadas não batem! Verifique.");
-                return;
-            }
-
-            localStorage.setItem(STORAGE_PREFIX + 'usuario', user);
-            localStorage.setItem(STORAGE_PREFIX + 'senha', pass);
+        // --- SISTEMA DE LOGIN E CONTROLE DE ACESSO ---
+        function verificarAutenticacao() {
+            const usuarioLogado = localStorage.getItem('zap_lite_usuario');
+            const areaLogin = document.getElementById('areaLogin');
+            const areaSistema = document.getElementById('areaSistema');
             
-            sessionStorage.setItem(STORAGE_PREFIX + 'sessao_ativa', 'true');
+            if (usuarioLogado) {
+                if (areaLogin) areaLogin.classList.add('hidden');
+                if (areaSistema) areaSistema.classList.remove('hidden');
+                document.getElementById('labelUsuarioEmail').innerText = usuarioLogado;
+                
+                // Muda a estrutura da página para esticar o painel do sistema
+                document.body.className = "bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col justify-start p-4 md:p-8 antialiased";
+                return true;
+            } else {
+                if (areaLogin) areaLogin.classList.remove('hidden');
+                if (areaSistema) areaSistema.classList.add('hidden');
+                
+                // Centraliza o box de login na tela
+                document.body.className = "bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col justify-center items-center p-4 antialiased";
+                return false;
+            }
+        }
+
+        function executarLogin() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const senha = document.getElementById('loginSenha').value.trim();
             
-            alert("🎯 Conta configurada com sucesso!");
-            verificarEstadoAcesso();
-        }
-
-        function processarLogin() {
-            if (verificarLicencaExpirada()) return;
-
-            const user = document.getElementById('loginUser').value.trim();
-            const pass = document.getElementById('loginPass').value;
-
-            const userSalvo = localStorage.getItem(STORAGE_PREFIX + 'usuario');
-            const passSalva = localStorage.getItem(STORAGE_PREFIX + 'senha');
-
-            if (user === userSalvo && pass === passSalva) {
-                sessionStorage.setItem(STORAGE_PREFIX + 'sessao_ativa', 'true');
-                verificarEstadoAcesso();
-            } else {
-                alert("Usuário ou senha inválidos!");
-            }
-        }
-
-        function irParaTelaRescue() {
-            ocultarTodasTelas();
-            document.getElementById('boxRedefinir').style.display = 'none';
-            document.getElementById('rescueChave').value = '';
-            mostrarTela('telaRescue');
-        }
-
-        function validarChaveRescue() {
-            const chaveDigitada = document.getElementById('rescueChave').value.trim();
-            const chaveMestraSalva = localStorage.getItem(STORAGE_PREFIX + 'chave');
-
-            if (!chaveDigitada) {
-                alert("Insira a chave do produto!");
+            if (!email || !senha) {
+                alert("Preencha todos os campos!");
                 return;
             }
-
-            if (chaveDigitada === chaveMestraSalva) {
-                const usuario = localStorage.getItem(STORAGE_PREFIX + 'usuario');
-                document.getElementById('boxRedefinir').style.display = 'block';
-                document.getElementById('lblUsuarioIdentificado').innerText = `Conta localizada: ${usuario}`;
-                document.getElementById('rescueNovaSenha').focus();
+            
+            // Você pode mudar essa senha "123456" para a senha que quiser que seu cliente use
+            if (senha === "123456") { 
+                localStorage.setItem('zap_lite_usuario', email);
+                if(verificarAutenticacao()) {
+                    inicializarSistemaApp();
+                }
             } else {
-                alert("A chave digitada não corresponde à chave ativa deste dispositivo!");
+                alert("Senha inválida ou incorreta!");
             }
         }
 
-        function salvarNovaSenhaResgatada() {
-            const novaSenha = document.getElementById('rescueNovaSenha').value;
-            if (novaSenha.length < 4) {
-                alert("A nova senha precisa ter pelo menos 4 caracteres!");
-                return;
-            }
-
-            localStorage.setItem(STORAGE_PREFIX + 'senha', novaSenha);
-            alert("🟢 Perfeito! Senha redefinida com sucesso. Faça login agora.");
-            verificarEstadoAcesso();
-        }
-
-        function fazerLogoutCliente() {
-            sessionStorage.removeItem(STORAGE_PREFIX + 'sessao_ativa');
+        function executarLogout() {
+            localStorage.removeItem('zap_lite_usuario');
             window.location.reload();
+        }
+
+        // --- SISTEMA ORIGINAL DO EMISSOR ---
+        function checarLicencaValida() {
+            const ch = localStorage.getItem('lite_licenca_chave') || "";
+            const bloco = document.getElementById('bloqueioAssinatura');
+            if(!ch) { bloco.style.display="flex"; return false; }
+            try {
+                const dec = atob(ch); if(!dec.startsWith("ZAPFACIL-")) { bloco.style.display="flex"; return false; }
+                const ds = dec.split("-")[1];
+                const dV = new Date(parseInt(ds.substring(0,4)), parseInt(ds.substring(4,6))-1, parseInt(ds.substring(6,8)), 23,59,59);
+                if(new Date() > dV) { bloco.style.display="flex"; return false; }
+                bloco.style.display="none";
+                document.getElementById('labelValidadeLicenca').innerText = `Validade: ${ds.substring(6,8)}/${ds.substring(4,6)}/${ds.substring(0,4)}`;
+                return true;
+            } catch(e) { bloco.style.display="flex"; return false; }
+        }
+        function salvarNovaChave() {
+            localStorage.setItem('lite_licenca_chave', document.getElementById('inputChaveRenovacao').value.trim());
+            if(checarLicencaValida()) window.location.reload(); else alert("Chave Expira ou Inválida!");
+        }
+
+        let chavePixCopiaMemoria = "";
+        
+        window.onload = function() {
+            // Primeiro checa se o usuário passou pela tela de login por senha
+            if (verificarAutenticacao()) {
+                inicializarSistemaApp();
+            }
+        }
+
+        function inicializarSistemaApp() {
+            checarLicencaValida();
+            if (localStorage.getItem('lite_nomeEmpresa')) document.getElementById('nomeEmpresa').value = localStorage.getItem('lite_nomeEmpresa');
+            if (localStorage.getItem('lite_telefoneEmpresa')) document.getElementById('telefoneEmpresa').value = localStorage.getItem('lite_telefoneEmpresa');
+            if (localStorage.getItem('lite_logoEmpresa')) {
+                document.getElementById('cupomLogo').src = localStorage.getItem('lite_logoEmpresa');
+                document.getElementById('cupomLogoContainer').classList.replace('hidden', 'flex');
+                document.getElementById('btnRemoverLogo').classList.remove('hidden');
+            }
+            atualizarSelectChavesPixLite();
+        }
+
+        function obterChavesPixLite() { return JSON.parse(localStorage.getItem('lite_listaPix') || '[]'); }
+        function adicionarChavePixLiteColetor() {
+            const t = document.getElementById('tipoChavePixLite').value; const txt = document.getElementById('novaChavePixTxt').value.trim();
+            if(!txt) return; let c = obterChavesPixLite(); const f = `${t}: ${txt}`;
+            if(!c.includes(f)) { c.push(f); localStorage.setItem('lite_listaPix', JSON.stringify(c)); }
+            document.getElementById('novaChavePixTxt').value = ""; localStorage.setItem('lite_chaveAtiva', f);
+            atualizarSelectChavesPixLite();
+        }
+        function atualizarSelectChavesPixLite() {
+            const ch = obterChavesPixLite(); const s = document.getElementById('selectChavesPixSalvas');
+            s.innerHTML = ch.length ? '' : '<option value="">Sem Pix Cadastrado</option>';
+            ch.forEach(c => { s.innerHTML += `<option value="${c}" ${c===localStorage.getItem('lite_chaveAtiva')?'selected':''}>${c}</option>`; });
+            if(s.value) localStorage.setItem('lite_chaveAtiva', s.value);
+        }
+        function alternarChavePixLiteAtiva() { localStorage.setItem('lite_chaveAtiva', document.getElementById('selectChavesPixSalvas').value); }
+        function processarLogoLite(input) {
+            if(input.files[0]) {
+                const r = new FileReader(); r.onload = function(e){
+                    localStorage.setItem('lite_logoEmpresa', e.target.result); document.getElementById('cupomLogo').src = e.target.result;
+                    document.getElementById('cupomLogoContainer').classList.replace('hidden', 'flex'); document.getElementById('btnRemoverLogo').classList.remove('hidden');
+                }; r.readAsDataURL(input.files[0]);
+            }
+        }
+        function removerLogoLite() { localStorage.removeItem('lite_logoEmpresa'); document.getElementById('cupomLogoContainer').classList.replace('flex', 'hidden'); document.getElementById('btnRemoverLogo').classList.add('hidden'); }
+
+        function processarLite() {
+            if(!checarLicencaValida()) return;
+            const empresa = document.getElementById('nomeEmpresa').value.trim() || "PRESTADOR DE SERVIÇOS";
+            const telefone = document.getElementById('telefoneEmpresa').value.trim();
+            const chavePix = localStorage.getItem('lite_chaveAtiva') || "";
+            const cliente = document.getElementById('nomeCliente').value.trim() || "CONSUMIDOR PADRÃO";
+            const produto = document.getElementById('nomeProduto').value.trim();
+            const valorInput = document.getElementById('valorProduto').value.trim();
+            const formaPagto = document.getElementById('formaPagamento').value;
+            const status = document.getElementById('statusPagamento').value;
+
+            if (!produto || !valorInput) return alert("Preencha o serviço e o valor!");
+            localStorage.setItem('lite_nomeEmpresa', empresa); localStorage.setItem('lite_telefoneEmpresa', telefone);
+
+            document.getElementById('cupomEmpresa').innerText = empresa;
+            document.getElementById('cupomCliente').innerText = cliente;
+            document.getElementById('cupomProduto').innerText = produto;
+            document.getElementById('cupomValor').innerText = `R$ ${parseFloat(valorInput).toFixed(2)}`;
+            document.getElementById('cupomForm').innerText = `PAGTO: ${formaPagto}`;
+            document.getElementById('cupomValorForma').innerText = `R$ ${parseFloat(valorInput).toFixed(2)}`;
+            document.getElementById('cupomTotal').innerText = `R$ ${parseFloat(valorInput).toFixed(2)}`;
+            document.getElementById('cupomData').innerText = `DATA: ${new Date().toLocaleDateString('pt-BR')}`;
+            document.getElementById('cupomHora').innerText = `HORA: ${new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})}`;
+
+            const tel = document.getElementById('cupomTelefone'); if(telefone) { tel.innerText = `TEL: ${telefone}`; tel.classList.remove('hidden'); } else tel.classList.add('hidden');
+
+            const lPix = document.getElementById('linhaCupomPix'); const cExt = document.getElementById('containerPixExterno');
+            if (formaPagto === "PIX" && chavePix) {
+                document.getElementById('cupomChavePixTxt').innerText = chavePix; lPix.classList.remove('hidden');
+                const limpa = chavePix.includes(': ') ? chavePix.split(': ')[1] : chavePix;
+                document.getElementById('txtPixExterno').innerText = limpa; cExt.classList.remove('hidden');
+                chavePixCopiaMemoria = limpa;
+            } else { lPix.classList.add('hidden'); cExt.classList.add('hidden'); chavePixCopiaMemoria = ""; }
+
+            const b = document.getElementById('cupomBadge'); const btn = document.getElementById('btnEnviar');
+            if (status === "PAGO") { b.innerText = "COMPROVANTE DE PAGAMENTO"; b.className = "text-center font-sans font-black text-[10px] py-0.5 rounded mb-3 text-white bg-slate-700"; }
+            else { b.innerText = "FATURA DE SERVIÇO"; b.className = "text-center font-sans font-black text-[10px] py-0.5 rounded mb-3 text-amber-950 bg-amber-400"; }
+
+            btn.removeAttribute('disabled'); btn.className = "w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider shadow";
+            document.getElementById('cupomContainer').scrollIntoView({ behavior: 'smooth' });
+            if (!localStorage.getItem('lite_logoEmpresa')) document.getElementById('cupomLogoContainer').classList.add('hidden');
+        }
+
+        function enviarLite() {
+            html2canvas(document.getElementById('cupomContainer'), { scale: 2 }).then(canvas => {
+                canvas.toBlob(blob => {
+                    const file = new File([blob], 'comprovante.png', { type: 'image/png' });
+                    let txt = chavePixCopiaMemoria ? `🔑 Segue chave Pix para cópia:\n\n${chavePixCopiaMemoria}` : "";
+                    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                        let sd = { files: [file] }; if(txt) sd.text = txt; navigator.share(sd);
+                    } else {
+                        try {
+                            navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]).then(() => {
+                                alert("Copiado!"); if(txt) window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(txt)}`);
+                            });
+                        } catch(e) {}
+                    }
+                }, 'image/png');
+            });
+        }
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ZapFácil Lite - Emissor Rápido</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        .quebra-texto-cupom { white-space: normal !important; word-break: break-word !important; }
+        #bloqueioAssinatura {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.99); z-index: 99999; color: white;
+            align-items: center; justify-content: center; flex-direction: column; padding: 20px; text-align: center;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col justify-center items-center p-4 antialiased">
+
+    <!-- BLOQUEIO DE MENSALIDADE ORIGINAL -->
+    <div id="bloqueioAssinatura">
+        <div class="max-w-xs p-5 bg-slate-900 rounded-xl border border-red-500/40 shadow-xl space-y-3">
+            <span class="text-4xl">🔒</span>
+            <h1 class="text-base font-bold text-red-400 uppercase">Sistema Suspenso</h1>
+            <p class="text-xs text-gray-400">Entre em contato para renovar seu plano mensal de R$ 20,00.</p>
+            <input id="inputChaveRenovacao" type="text" placeholder="Chave de Ativação" class="w-full text-center p-2 rounded bg-slate-800 text-white border border-gray-700 text-xs font-mono outline-none">
+            <button onclick="salvarNovaChave()" class="w-full bg-blue-600 font-bold py-2 rounded text-xs">Ativar</button>
+        </div>
+    </div>
+
+    <!-- 1. TELA DE LOGIN PROTEGIDA -->
+    <div id="areaLogin" class="w-full max-w-md p-6 bg-slate-900 rounded-2xl border border-slate-800 shadow-2xl space-y-4">
+        <div class="text-center">
+            <h1 class="text-2xl font-black text-white tracking-wide">⚡ ZapFácil Lite</h1>
+            <p class="text-xs text-slate-400 mt-1">Insira suas credenciais para acessar o emissor</p>
+        </div>
+        <div class="space-y-3">
+            <div>
+                <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">E-mail de Acesso</label>
+                <input id="loginEmail" type="email" placeholder="seuemail@gmail.com" class="w-full p-2.5 rounded-lg bg-slate-800 text-white border border-slate-700 text-sm outline-none focus:border-emerald-500">
+            </div>
+            <div>
+                <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Senha</label>
+                <input id="loginSenha" type="password" placeholder="••••••••" class="w-full p-2.5 rounded-lg bg-slate-800 text-white border border-slate-700 text-sm outline-none focus:border-emerald-500">
+            </div>
+            <button onclick="executarLogin()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-lg text-xs uppercase tracking-wider transition-all shadow-lg">Entrar no Sistema</button>
+        </div>
+    </div>
+
+    <!-- 2. ÁREA PROTEGIDA DO SISTEMA -->
+    <div id="areaSistema" class="w-full max-w-6xl space-y-4 hidden">
+        
+        <!-- Topo Administrativo de Login/Logout -->
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-4 bg-slate-900 p-4 rounded-xl border border-slate-800 shadow-md">
+            <div>
+                <h1 class="text-base font-bold text-white flex items-center gap-2">
+                    ZapFácil Lite - Emissor Rápido <span class="text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 font-medium">Ativo</span>
+                </h1>
+                <p class="text-xs text-slate-400 mt-0.5">Sistema operando normalmente</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <div class="bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 flex items-center gap-2 text-xs font-medium text-slate-200">
+                    <span>👤</span>
+                    <span id="labelUsuarioEmail">...</span>
+                </div>
+                <button onclick="executarLogout()" class="bg-red-950/40 hover:bg-red-950/60 text-red-400 border border-red-900/50 px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 transition-all">
+                    Desconectar
+                </button>
+            </div>
+        </div>
+
+        <!-- SEU SISTEMA ORIGINAL COMPLETO (PRESERVADO) -->
+        <div class="bg-slate-50 text-slate-800 rounded-2xl p-4 md:p-6 shadow-xl border border-slate-200">
+            <header class="bg-slate-800 text-white py-3 px-4 shadow-sm text-center sticky top-0 z-50 rounded-xl mb-4">
+                <h1 class="text-base font-bold flex justify-center items-center gap-1">⚡ ZapFácil Lite</h1>
+                <p id="labelValidadeLicenca" class="text-[8px] text-slate-400 font-mono uppercase tracking-wide"></p>
+            </header>
+
+            <main class="max-w-5xl mx-auto w-full grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+                <div class="space-y-3 w-full">
+                    <section class="bg-white p-4 rounded-xl shadow-sm border space-y-3">
+                        <h2 class="text-xs font-bold text-slate-700 uppercase tracking-wide border-b pb-1">🏢 Seus Dados</h2>
+                        <div class="grid grid-cols-2 gap-2">
+                            <label class="bg-slate-100 text-slate-700 text-center text-[10px] font-bold p-1.5 rounded cursor-pointer border">
+                                📁 Logo
+                                <input type="file" accept="image/*" onchange="processarLogoLite(this)" class="hidden">
+                            </label>
+                            <button onclick="removerLogoLite()" id="btnRemoverLogo" class="bg-red-50 text-red-500 text-[10px] p-1.5 rounded border border-red-100 hidden">✕ Remover</button>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input id="nomeEmpresa" type="text" placeholder="Seu Negócio" class="w-full text-xs px-2.5 py-2 rounded border outline-none">
+                            <input id="telefoneEmpresa" type="text" placeholder="Telefone" class="w-full text-xs px-2.5 py-2 rounded border outline-none">
+                        </div>
+
+                        <div class="pt-2 border-t space-y-2">
+                            <div class="flex gap-1">
+                                <select id="tipoChavePixLite" class="text-[11px] p-1 border bg-white font-bold w-16 outline-none">
+                                    <option value="CPF">CPF</option>
+                                    <option value="Celular">Tel</option>
+                                    <option value="Aleatória">Chave</option>
+                                </select>
+                                <input id="novaChavePixTxt" type="text" placeholder="Sua Chave Pix..." class="flex-grow text-xs px-2 py-1 border outline-none">
+                                <button onclick="adicionarChavePixLiteColetor()" class="bg-slate-700 text-white px-2 rounded text-xs">➕</button>
+                            </div>
+                            <select id="selectChavesPixSalvas" onchange="alternarChavePixLiteAtiva()" class="w-full text-xs p-1.5 border bg-white"></select>
+                        </div>
+                    </section>
+
+                    <section class="bg-white p-4 rounded-xl shadow-sm border space-y-3">
+                        <h2 class="text-xs font-bold text-slate-700 uppercase tracking-wide border-b pb-1">📝 Dados do Pedido</h2>
+                        <input id="nomeCliente" type="text" placeholder="Nome do Cliente" class="w-full text-xs px-3 py-2.5 rounded border outline-none">
+                        <textarea id="nomeProduto" rows="2" placeholder="O que foi vendido? (Texto Livre)" class="w-full text-xs px-3 py-2 rounded border outline-none"></textarea>
+                        
+                        <div class="grid grid-cols-2 gap-2">
+                            <input id="valorProduto" type="number" step="0.01" placeholder="Valor R$" class="w-full text-xs px-3 py-2.5 rounded border font-bold outline-none">
+                            <select id="formaPagamento" class="w-full text-xs px-3 py-2.5 rounded border bg-white outline-none">
+                                <option value="PIX">PIX</option>
+                                <option value="DINHEIRO">Dinheiro</option>
+                                <option value="CARTÃO">Cartão</option>
+                            </select>
+                        </div>
+                        <select id="statusPagamento" class="w-full text-xs px-3 py-2.5 rounded border font-bold bg-white text-center outline-none">
+                            <option value="PAGO">🟢 RECEBIDO (Comprovante)</option>
+                            <option value="PENDENTE">🟡 EM ABERTO (Fatura)</option>
+                        </select>
+
+                        <button onclick="processarLite()" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 px-4 rounded-lg text-xs uppercase tracking-wider transition-all">
+                            ⚡ GERAR COMPROVANTE
+                        </button>
+                    </section>
+                </div>
+
+                <div class="flex flex-col items-center space-y-3 w-full">
+                    <div id="cupomContainer" class="bg-white p-4 shadow border border-slate-300 w-full max-w-[320px] text-slate-800 font-mono text-[11px] uppercase relative leading-relaxed text-left">
+                        <div id="cupomBadge" class="text-center font-sans font-black text-[10px] py-0.5 rounded mb-3 text-white bg-slate-700">COMPROVANTE DE PAGAMENTO</div>
+                        <div id="cupomLogoContainer" class="hidden justify-center items-center w-full mb-2"><img id="cupomLogo" src="" class="max-h-12 max-w-[130px] object-contain mx-auto block"></div>
+                        <div id="cupomEmpresa" class="font-bold text-center text-xs">EMISSOR LITE</div>
+                        <div id="cupomTelefone" class="text-center text-[9px] text-slate-500 hidden"></div>
+                        <div class="border-b border-dashed border-slate-400 my-1.5"></div>
+                        <div class="flex justify-between text-[9px] text-slate-500"><span id="cupomData">DATA: --/--/----</span><span id="cupomHora">HORA: --:--</span></div>
+                        <div class="border-b border-dashed border-slate-400 my-1.5"></div>
+                        <div class="text-[9px] text-slate-400">CLIENTE:</div>
+                        <div id="cupomCliente" class="font-bold text-slate-900 max-w-full quebra-texto-cupom">CONSUMIDOR</div>
+                        <div class="border-b border-dashed border-slate-400 my-1.5"></div>
+                        
+                        <div class="flex justify-between font-bold mb-1"><span>ITEM</span><span class="text-right">VALOR</span></div>
+                        <div class="flex justify-between gap-4 items-start">
+                            <span id="cupomProduto" class="quebra-texto-cupom text-slate-700 font-medium">NENHUM LANÇADO</span>
+                            <span id="cupomValor" class="font-bold whitespace-nowrap text-right">R$ 0,00</span>
+                        </div>
+                        
+                        <div class="border-b border-dashed border-slate-400 my-1.5"></div>
+                        <div class="flex justify-between text-slate-700"><span id="cupomForm">PAGAMENTO: -</span><span id="cupomValorForma">R$ 0,00</span></div>
+                        <div id="linhaCupomPix" class="bg-emerald-50 text-emerald-900 p-1.5 rounded border border-emerald-200 my-1 hidden text-[9px]">
+                            <span class="font-bold block text-[7px] text-emerald-700">PIX:</span>
+                            <span id="cupomChavePixTxt" class="font-mono break-all font-bold">--</span>
+                        </div>
+                        <div class="border-t border-dashed border-slate-300 my-1"></div>
+                        <div class="flex justify-between text-xs font-black text-slate-900"><span>TOTAL</span><span id="cupomTotal" class="text-sm">R$ 0,00</span></div>
+                        <div class="border-b border-dashed border-slate-400 my-1.5"></div>
+                        <div class="text-[9px] text-center text-slate-400 font-bold tracking-widest">*** OBRIGADO ***</div>
+                    </div>
+
+                    <div class="w-full max-w-[320px] space-y-2 px-1">
+                        <div id="containerPixExterno" class="bg-emerald-50 border border-emerald-200 rounded-xl p-2.5 text-center hidden">
+                            <span class="block text-[9px] font-bold text-emerald-700 mb-0.5">Pix para cópia:</span>
+                            <div id="txtPixExterno" class="bg-white border p-1 rounded text-xs font-mono break-all select-all font-bold text-slate-800 cursor-pointer"></div>
+                        </div>
+                        <button id="btnEnviar" onclick="enviarLite()" class="w-full bg-gray-300 text-gray-500 cursor-not-allowed font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider shadow" disabled>🚀 Enviar p/ WhatsApp</button>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // --- SISTEMA DE LOGIN E CONTROLE DE ACESSO ---
+        function verificarAutenticacao() {
+            const usuarioLogado = localStorage.getItem('zap_lite_usuario');
+            const areaLogin = document.getElementById('areaLogin');
+            const areaSistema = document.getElementById('areaSistema');
+            
+            if (usuarioLogado) {
+                if (areaLogin) areaLogin.classList.add('hidden');
+                if (areaSistema) areaSistema.classList.remove('hidden');
+                document.getElementById('labelUsuarioEmail').innerText = usuarioLogado;
+                
+                // Muda a estrutura da página para esticar o painel do sistema
+                document.body.className = "bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col justify-start p-4 md:p-8 antialiased";
+                return true;
+            } else {
+                if (areaLogin) areaLogin.classList.remove('hidden');
+                if (areaSistema) areaSistema.classList.add('hidden');
+                
+                // Centraliza o box de login na tela
+                document.body.className = "bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col justify-center items-center p-4 antialiased";
+                return false;
+            }
+        }
+
+        function executarLogin() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const senha = document.getElementById('loginSenha').value.trim();
+            
+            if (!email || !senha) {
+                alert("Preencha todos os campos!");
+                return;
+            }
+            
+            // Você pode mudar essa senha "123456" para a senha que quiser que seu cliente use
+            if (senha === "123456") { 
+                localStorage.setItem('zap_lite_usuario', email);
+                if(verificarAutenticacao()) {
+                    inicializarSistemaApp();
+                }
+            } else {
+                alert("Senha inválida ou incorreta!");
+            }
+        }
+
+        function executarLogout() {
+            localStorage.removeItem('zap_lite_usuario');
+            window.location.reload();
+        }
+
+        // --- SISTEMA ORIGINAL DO EMISSOR ---
+        function checarLicencaValida() {
+            const ch = localStorage.getItem('lite_licenca_chave') || "";
+            const bloco = document.getElementById('bloqueioAssinatura');
+            if(!ch) { bloco.style.display="flex"; return false; }
+            try {
+                const dec = atob(ch); if(!dec.startsWith("ZAPFACIL-")) { bloco.style.display="flex"; return false; }
+                const ds = dec.split("-")[1];
+                const dV = new Date(parseInt(ds.substring(0,4)), parseInt(ds.substring(4,6))-1, parseInt(ds.substring(6,8)), 23,59,59);
+                if(new Date() > dV) { bloco.style.display="flex"; return false; }
+                bloco.style.display="none";
+                document.getElementById('labelValidadeLicenca').innerText = `Validade: ${ds.substring(6,8)}/${ds.substring(4,6)}/${ds.substring(0,4)}`;
+                return true;
+            } catch(e) { bloco.style.display="flex"; return false; }
+        }
+        function salvarNovaChave() {
+            localStorage.setItem('lite_licenca_chave', document.getElementById('inputChaveRenovacao').value.trim());
+            if(checarLicencaValida()) window.location.reload(); else alert("Chave Expira ou Inválida!");
+        }
+
+        let chavePixCopiaMemoria = "";
+        
+        window.onload = function() {
+            // Primeiro checa se o usuário passou pela tela de login por senha
+            if (verificarAutenticacao()) {
+                inicializarSistemaApp();
+            }
+        }
+
+        function inicializarSistemaApp() {
+            checarLicencaValida();
+            if (localStorage.getItem('lite_nomeEmpresa')) document.getElementById('nomeEmpresa').value = localStorage.getItem('lite_nomeEmpresa');
+            if (localStorage.getItem('lite_telefoneEmpresa')) document.getElementById('telefoneEmpresa').value = localStorage.getItem('lite_telefoneEmpresa');
+            if (localStorage.getItem('lite_logoEmpresa')) {
+                document.getElementById('cupomLogo').src = localStorage.getItem('lite_logoEmpresa');
+                document.getElementById('cupomLogoContainer').classList.replace('hidden', 'flex');
+                document.getElementById('btnRemoverLogo').classList.remove('hidden');
+            }
+            atualizarSelectChavesPixLite();
+        }
+
+        function obterChavesPixLite() { return JSON.parse(localStorage.getItem('lite_listaPix') || '[]'); }
+        function adicionarChavePixLiteColetor() {
+            const t = document.getElementById('tipoChavePixLite').value; const txt = document.getElementById('novaChavePixTxt').value.trim();
+            if(!txt) return; let c = obterChavesPixLite(); const f = `${t}: ${txt}`;
+            if(!c.includes(f)) { c.push(f); localStorage.setItem('lite_listaPix', JSON.stringify(c)); }
+            document.getElementById('novaChavePixTxt').value = ""; localStorage.setItem('lite_chaveAtiva', f);
+            atualizarSelectChavesPixLite();
+        }
+        function atualizarSelectChavesPixLite() {
+            const ch = obterChavesPixLite(); const s = document.getElementById('selectChavesPixSalvas');
+            s.innerHTML = ch.length ? '' : '<option value="">Sem Pix Cadastrado</option>';
+            ch.forEach(c => { s.innerHTML += `<option value="${c}" ${c===localStorage.getItem('lite_chaveAtiva')?'selected':''}>${c}</option>`; });
+            if(s.value) localStorage.setItem('lite_chaveAtiva', s.value);
+        }
+        function alternarChavePixLiteAtiva() { localStorage.setItem('lite_chaveAtiva', document.getElementById('selectChavesPixSalvas').value); }
+        function processarLogoLite(input) {
+            if(input.files[0]) {
+                const r = new FileReader(); r.onload = function(e){
+                    localStorage.setItem('lite_logoEmpresa', e.target.result); document.getElementById('cupomLogo').src = e.target.result;
+                    document.getElementById('cupomLogoContainer').classList.replace('hidden', 'flex'); document.getElementById('btnRemoverLogo').classList.remove('hidden');
+                }; r.readAsDataURL(input.files[0]);
+            }
+        }
+        function removerLogoLite() { localStorage.removeItem('lite_logoEmpresa'); document.getElementById('cupomLogoContainer').classList.replace('flex', 'hidden'); document.getElementById('btnRemoverLogo').classList.add('hidden'); }
+
+        function processarLite() {
+            if(!checarLicencaValida()) return;
+            const empresa = document.getElementById('nomeEmpresa').value.trim() || "PRESTADOR DE SERVIÇOS";
+            const telefone = document.getElementById('telefoneEmpresa').value.trim();
+            const chavePix = localStorage.getItem('lite_chaveAtiva') || "";
+            const cliente = document.getElementById('nomeCliente').value.trim() || "CONSUMIDOR PADRÃO";
+            const produto = document.getElementById('nomeProduto').value.trim();
+            const valorInput = document.getElementById('valorProduto').value.trim();
+            const formaPagto = document.getElementById('formaPagamento').value;
+            const status = document.getElementById('statusPagamento').value;
+
+            if (!produto || !valorInput) return alert("Preencha o serviço e o valor!");
+            localStorage.setItem('lite_nomeEmpresa', empresa); localStorage.setItem('lite_telefoneEmpresa', telefone);
+
+            document.getElementById('cupomEmpresa').innerText = empresa;
+            document.getElementById('cupomCliente').innerText = cliente;
+            document.getElementById('cupomProduto').innerText = produto;
+            document.getElementById('cupomValor').innerText = `R$ ${parseFloat(valorInput).toFixed(2)}`;
+            document.getElementById('cupomForm').innerText = `PAGTO: ${formaPagto}`;
+            document.getElementById('cupomValorForma').innerText = `R$ ${parseFloat(valorInput).toFixed(2)}`;
+            document.getElementById('cupomTotal').innerText = `R$ ${parseFloat(valorInput).toFixed(2)}`;
+            document.getElementById('cupomData').innerText = `DATA: ${new Date().toLocaleDateString('pt-BR')}`;
+            document.getElementById('cupomHora').innerText = `HORA: ${new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})}`;
+
+            const tel = document.getElementById('cupomTelefone'); if(telefone) { tel.innerText = `TEL: ${telefone}`; tel.classList.remove('hidden'); } else tel.classList.add('hidden');
+
+            const lPix = document.getElementById('linhaCupomPix'); const cExt = document.getElementById('containerPixExterno');
+            if (formaPagto === "PIX" && chavePix) {
+                document.getElementById('cupomChavePixTxt').innerText = chavePix; lPix.classList.remove('hidden');
+                const limpa = chavePix.includes(': ') ? chavePix.split(': ')[1] : chavePix;
+                document.getElementById('txtPixExterno').innerText = limpa; cExt.classList.remove('hidden');
+                chavePixCopiaMemoria = limpa;
+            } else { lPix.classList.add('hidden'); cExt.classList.add('hidden'); chavePixCopiaMemoria = ""; }
+
+            const b = document.getElementById('cupomBadge'); const btn = document.getElementById('btnEnviar');
+            if (status === "PAGO") { b.innerText = "COMPROVANTE DE PAGAMENTO"; b.className = "text-center font-sans font-black text-[10px] py-0.5 rounded mb-3 text-white bg-slate-700"; }
+            else { b.innerText = "FATURA DE SERVIÇO"; b.className = "text-center font-sans font-black text-[10px] py-0.5 rounded mb-3 text-amber-950 bg-amber-400"; }
+
+            btn.removeAttribute('disabled'); btn.className = "w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider shadow";
+            document.getElementById('cupomContainer').scrollIntoView({ behavior: 'smooth' });
+            if (!localStorage.getItem('lite_logoEmpresa')) document.getElementById('cupomLogoContainer').classList.add('hidden');
+        }
+
+        function enviarLite() {
+            html2canvas(document.getElementById('cupomContainer'), { scale: 2 }).then(canvas => {
+                canvas.toBlob(blob => {
+                    const file = new File([blob], 'comprovante.png', { type: 'image/png' });
+                    let txt = chavePixCopiaMemoria ? `🔑 Segue chave Pix para cópia:\n\n${chavePixCopiaMemoria}` : "";
+                    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                        let sd = { files: [file] }; if(txt) sd.text = txt; navigator.share(sd);
+                    } else {
+                        try {
+                            navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]).then(() => {
+                                alert("Copiado!"); if(txt) window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(txt)}`);
+                            });
+                        } catch(e) {}
+                    }
+                }, 'image/png');
+            });
         }
     </script>
 </body>
