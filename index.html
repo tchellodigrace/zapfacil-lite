@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Login | ZapFácil</title>
+    <title>Login | ZapFácil Lite</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
         body { background-color: #f1f5f9; height: 100vh; display: flex; justify-content: center; align-items: center; }
@@ -54,8 +54,8 @@
 <body>
 
     <div class="card">
-        <!-- ALTERE APENAS O NOME DO ARQUIVO ABAIXO -->
-        <img src="NOME_DA_SUA_LOGO.png" alt="Logo" class="logo-login">
+        <!-- Logo do Lite vinculada corretamente -->
+        <img src="ChatGPT Image 12 de jul. de 2026, 13_03_09 (1).png" alt="ZapFácil Lite" class="logo-login">
         
         <h3 id="tituloAcesso">Primeira Ativação</h3>
         
@@ -73,15 +73,13 @@
     </div>
 
     <script>
-        // Lógica simplificada para manter o padrão
         function processarAcesso() {
             const chave = document.getElementById('inputChave').value;
             const senha = document.getElementById('inputSenha').value;
             
             if (chave && senha) {
-                // Aqui entra sua lógica de salvar a senha
-                localStorage.setItem('zap_configurado', 'true');
-                localStorage.setItem('zap_senha', senha);
+                localStorage.setItem('zap_lite_configurado', 'true');
+                localStorage.setItem('zap_lite_senha', senha);
                 alert("Acesso configurado com sucesso!");
                 window.location.reload();
             } else {
