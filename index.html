@@ -22,18 +22,16 @@
             <!-- Formulário de Registro (Primeiro Acesso) -->
             <div id="formRegistro" class="hidden space-y-3">
                 <h2 class="text-white font-bold text-lg">Criar Acesso</h2>
-                <p class="text-xs text-gray-400">Insira sua chave de ativação para criar seu usuário e senha.</p>
+                <p class="text-xs text-gray-400">Insira sua chave de ativação para criar sua senha.</p>
                 <input id="regChave" type="text" placeholder="Chave de Ativação" class="w-full p-2.5 rounded bg-slate-700 text-white border border-slate-600 text-sm outline-none text-center font-mono">
-                <input id="regUser" type="text" placeholder="Criar Usuário" class="w-full p-2.5 rounded bg-slate-700 text-white border border-slate-600 text-sm outline-none text-center">
-                <input id="regPass" type="password" placeholder="Criar Senha" class="w-full p-2.5 rounded bg-slate-700 text-white border border-slate-600 text-sm outline-none text-center">
+                <input id="regPass" type="password" placeholder="Criar Senha de Acesso" class="w-full p-2.5 rounded bg-slate-700 text-white border border-slate-600 text-sm outline-none text-center">
                 <button onclick="registrarLite()" class="w-full bg-emerald-600 text-white font-bold py-3 rounded text-sm hover:bg-emerald-500 transition-colors uppercase tracking-wider">Cadastrar</button>
             </div>
 
             <!-- Formulário de Login -->
             <div id="formLogin" class="hidden space-y-3">
                 <h2 class="text-white font-bold text-lg">Acessar Sistema</h2>
-                <input id="loginUser" type="text" placeholder="Usuário" class="w-full p-2.5 rounded bg-slate-700 text-white border border-slate-600 text-sm outline-none text-center">
-                <input id="loginPass" type="password" placeholder="Senha" class="w-full p-2.5 rounded bg-slate-700 text-white border border-slate-600 text-sm outline-none text-center">
+                <input id="loginPass" type="password" placeholder="Sua Senha" class="w-full p-2.5 rounded bg-slate-700 text-white border border-slate-600 text-sm outline-none text-center">
                 <button onclick="entrarLite()" class="w-full bg-blue-600 text-white font-bold py-3 rounded text-sm hover:bg-blue-500 transition-colors uppercase tracking-wider">Entrar</button>
                 <button onclick="mostrarRenovacao()" class="text-xs text-gray-400 hover:text-white underline mt-3 block w-full">Licença expirada? Renovar aqui</button>
             </div>
@@ -186,12 +184,11 @@
             fRen.classList.add('hidden');
 
             const chave = localStorage.getItem('lite_licenca_chave');
-            const user = localStorage.getItem('lite_user');
             const pass = localStorage.getItem('lite_pass');
             const loggedIn = sessionStorage.getItem('lite_logged_in');
 
             // 1. Sem registro completo -> Tela de Cadastro
-            if (!chave || !user || !pass) {
+            if (!chave || !pass) {
                 overlay.style.display = 'flex';
                 fReg.classList.remove('hidden');
                 return false;
@@ -204,7 +201,7 @@
                 return false;
             }
 
-            // 3. Chave válida, tem usuário e senha. Já fez login na sessão atual?
+            // 3. Chave válida e tem senha. Já fez login na sessão atual?
             if (loggedIn === 'true') {
                 overlay.style.display = 'none';
                 document.getElementById('labelValidadeLicenca').innerText = getValidade(chave);
@@ -219,14 +216,12 @@
 
         function registrarLite() {
             const k = document.getElementById('regChave').value.trim();
-            const u = document.getElementById('regUser').value.trim();
             const p = document.getElementById('regPass').value.trim();
             
-            if(!k || !u || !p) return alert("Preencha todos os campos para cadastrar!");
+            if(!k || !p) return alert("Preencha todos os campos para cadastrar!");
             if(!isKeyValid(k)) return alert("Chave inválida ou expirada!");
 
             localStorage.setItem('lite_licenca_chave', k);
-            localStorage.setItem('lite_user', u);
             localStorage.setItem('lite_pass', p);
             sessionStorage.setItem('lite_logged_in', 'true');
             
@@ -235,14 +230,13 @@
         }
 
         function entrarLite() {
-            const u = document.getElementById('loginUser').value.trim();
             const p = document.getElementById('loginPass').value.trim();
             
-            if(u === localStorage.getItem('lite_user') && p === localStorage.getItem('lite_pass')) {
+            if(p === localStorage.getItem('lite_pass')) {
                 sessionStorage.setItem('lite_logged_in', 'true');
                 window.location.reload();
             } else {
-                alert("Usuário ou senha incorretos!");
+                alert("Senha incorreta!");
             }
         }
 
@@ -272,7 +266,6 @@
         let chavePixCopiaMemoria = "";
         
         window.onload = function() {
-            // Se verificarAuth retornar false, ele trava a tela de login. Senão, carrega o app.
             if(verificarAuth()) {
                 if (localStorage.getItem('lite_nomeEmpresa')) document.getElementById('nomeEmpresa').value = localStorage.getItem('lite_nomeEmpresa');
                 if (localStorage.getItem('lite_telefoneEmpresa')) document.getElementById('telefoneEmpresa').value = localStorage.getItem('lite_telefoneEmpresa');
@@ -316,7 +309,6 @@
         function removerLogoLite() { localStorage.removeItem('lite_logoEmpresa'); document.getElementById('cupomLogoContainer').classList.replace('flex', 'hidden'); document.getElementById('btnRemoverLogo').classList.add('hidden'); }
 
         function processarLite() {
-            // Garante que o usuário não drible a segurança ao clicar no botão
             if(!verificarAuth()) return;
 
             const empresa = document.getElementById('nomeEmpresa').value.trim() || "PRESTADOR DE SERVIÇOS";
