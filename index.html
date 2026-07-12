@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>ZapFácil Lite | Login</title>
+    <title>Login | ZapFácil</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
         body { background-color: #f1f5f9; height: 100vh; display: flex; justify-content: center; align-items: center; }
@@ -18,82 +18,76 @@
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); 
         }
         
-        /* Ajuste a logo aqui - se o nome for diferente, altere o arquivo abaixo */
-        .logo-login { max-width: 200px; margin-bottom: 25px; }
+        .logo-login { max-width: 220px; margin-bottom: 30px; display: block; margin-left: auto; margin-right: auto; }
         
-        .form-group { text-align: left; margin-bottom: 15px; }
-        .form-group label { font-size: 11px; font-weight: bold; color: #64748b; margin-bottom: 5px; display: block; text-transform: uppercase; }
-        .input-field { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 10px; background: #f8fafc; font-size: 14px; }
+        .form-group { text-align: left; margin-bottom: 20px; }
+        .form-group label { font-size: 11px; font-weight: 800; color: #475569; margin-bottom: 8px; display: block; text-transform: uppercase; letter-spacing: 0.5px; }
         
-        .btn-login { width: 100%; padding: 14px; background-color: #059669; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: background 0.2s; }
+        .input-field { 
+            width: 100%; 
+            padding: 12px 16px; 
+            border: 1px solid #cbd5e1; 
+            border-radius: 10px; 
+            background: #f8fafc; 
+            font-size: 14px;
+            color: #1e293b;
+        }
+        
+        .btn-login { 
+            width: 100%; 
+            padding: 14px; 
+            background-color: #059669; 
+            color: white; 
+            border: none; 
+            border-radius: 10px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            text-transform: uppercase; 
+            font-size: 14px;
+            transition: background 0.2s; 
+        }
         .btn-login:hover { background-color: #047857; }
         
-        .hidden { display: none; }
+        h3 { color: #1e293b; margin-bottom: 25px; font-size: 18px; }
     </style>
 </head>
 <body>
 
     <div class="card">
-        <!-- Substitua 'logo-lite.png' pelo nome exato do arquivo da logo do Lite -->
-        <img src="logo-lite.png" alt="ZapFácil Lite" class="logo-login">
+        <!-- ALTERE APENAS O NOME DO ARQUIVO ABAIXO -->
+        <img src="NOME_DA_SUA_LOGO.png" alt="Logo" class="logo-login">
         
-        <h3 id="tituloAcesso" style="margin-bottom: 20px; color: #1e293b;">Carregando...</h3>
+        <h3 id="tituloAcesso">Primeira Ativação</h3>
         
-        <div id="camposAtivacao" class="hidden">
-            <div class="form-group">
-                <label>Chave de Ativação</label>
-                <input type="text" id="inputChave" class="input-field" placeholder="Insira sua chave...">
-            </div>
+        <div class="form-group">
+            <label>Chave de Ativação</label>
+            <input type="text" id="inputChave" class="input-field" placeholder="Insira sua chave...">
         </div>
 
         <div class="form-group">
-            <label id="labelSenha">Senha de Acesso</label>
+            <label>Definir Senha de Acesso</label>
             <input type="password" id="inputSenha" class="input-field" placeholder="Sua senha...">
         </div>
 
-        <button class="btn-login" onclick="processarAcesso()">ACESSAR SISTEMA</button>
+        <button class="btn-login" onclick="processarAcesso()">CONFIRMAR</button>
     </div>
 
     <script>
-        // Verifica se já existe uma senha salva para o Lite
-        const configurado = localStorage.getItem('zap_lite_configurado');
-
-        function atualizarTela() {
-            if (configurado) {
-                document.getElementById('tituloAcesso').innerText = "Bem-vindo de volta!";
-                document.getElementById('labelSenha').innerText = "Digite sua senha";
-                document.getElementById('camposAtivacao').classList.add('hidden');
-            } else {
-                document.getElementById('tituloAcesso').innerText = "Ativação Lite";
-                document.getElementById('camposAtivacao').classList.remove('hidden');
-            }
-        }
-
+        // Lógica simplificada para manter o padrão
         function processarAcesso() {
+            const chave = document.getElementById('inputChave').value;
             const senha = document.getElementById('inputSenha').value;
             
-            if (!configurado) {
-                const chave = document.getElementById('inputChave').value;
-                if (chave && senha) {
-                    localStorage.setItem('zap_lite_configurado', 'true');
-                    localStorage.setItem('zap_lite_senha', senha);
-                    alert("Sistema Lite ativado!");
-                    window.location.reload();
-                } else {
-                    alert("Por favor, preencha a chave e a senha.");
-                }
+            if (chave && senha) {
+                // Aqui entra sua lógica de salvar a senha
+                localStorage.setItem('zap_configurado', 'true');
+                localStorage.setItem('zap_senha', senha);
+                alert("Acesso configurado com sucesso!");
+                window.location.reload();
             } else {
-                const senhaSalva = localStorage.getItem('zap_lite_senha');
-                if (senha === senhaSalva) {
-                    alert("Acesso liberado!");
-                    // Redirecionar para o painel Lite aqui
-                } else {
-                    alert("Senha incorreta.");
-                }
+                alert("Por favor, preencha todos os campos.");
             }
         }
-
-        atualizarTela();
     </script>
 </body>
 </html>
