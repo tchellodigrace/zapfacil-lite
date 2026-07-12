@@ -2,65 +2,813 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Acesso ZapFácil Lite</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Admin - ZapFácil Gestão</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-        body { background-color: #f1f5f9; height: 100vh; display: flex; justify-content: center; align-items: center; }
-        .card { background-color: #ffffff; border: 1px solid #e2e8f0; padding: 40px; border-radius: 16px; width: 100%; max-width: 400px; text-align: center; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); }
-        .logo-login { max-width: 220px; margin-bottom: 30px; display: block; margin-left: auto; margin-right: auto; }
-        .form-group { text-align: left; margin-bottom: 20px; }
-        .form-group label { font-size: 11px; font-weight: 800; color: #475569; margin-bottom: 8px; display: block; text-transform: uppercase; letter-spacing: 0.5px; }
-        .input-field { width: 100%; padding: 12px 16px; border: 1px solid #cbd5e1; border-radius: 10px; background: #f8fafc; font-size: 14px; color: #1e293b; }
-        .btn-login { width: 100%; padding: 14px; background-color: #059669; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 14px; }
-        .btn-login:hover { background-color: #047857; }
-        h3 { color: #1e293b; margin-bottom: 25px; font-size: 18px; }
-        .hidden { display: none; }
+        /* CSS Embutido para funcionar 100% offline ou com bloqueadores do Brave */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #020617;
+            color: #f8fafc;
+            min-height: 100vh;
+            padding-bottom: 40px;
+        }
+
+        /* TELA DE LOGIN */
+        #telaLogin {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #020617;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .login-card {
+            background-color: #0f172a;
+            border: 1px solid #1e293b;
+            border-radius: 16px;
+            padding: 30px;
+            width: 100%;
+            max-width: 380px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        .login-logo {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .login-card h2 {
+            font-size: 20px;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .login-card h2 span {
+            color: #10b981;
+        }
+
+        .login-card p {
+            font-size: 13px;
+            color: #94a3b8;
+            margin-bottom: 24px;
+        }
+
+        /* ESTRUTURA DO PAINEL (OCULTO POR PADRÃO) */
+        #conteudoPainel {
+            display: none;
+        }
+
+        header {
+            background-color: #0f172a;
+            border-bottom: 1px solid #1e293b;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 20px;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .logo-text h1 {
+            font-size: 18px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .logo-text span {
+            color: #10b981;
+        }
+
+        .logo-text p {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+
+        .stats-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .stat-card {
+            background-color: #020617;
+            border: 1px solid #1e293b;
+            padding: 10px 20px;
+            border-radius: 12px;
+            text-align: center;
+            min-width: 110px;
+        }
+
+        .stat-card span.title {
+            display: block;
+            font-size: 10px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .stat-card span.value {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .stat-card span.value.green {
+            color: #10b981;
+        }
+
+        .btn-logout {
+            background-color: #1e293b;
+            color: #94a3b8;
+            border: 1px solid #334155;
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-logout:hover {
+            background-color: rgba(244, 63, 94, 0.1);
+            color: #f43f5e;
+            border-color: rgba(244, 63, 94, 0.2);
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        @media (min-width: 992px) {
+            main {
+                grid-template-columns: 350px 1fr;
+            }
+        }
+
+        .card {
+            background-color: #0f172a;
+            border: 1px solid #1e293b;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-title {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #e2e8f0;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #1e293b;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 11px;
+            font-weight: bold;
+            color: #94a3b8;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            background-color: #020617;
+            border: 1px solid #1e293b;
+            border-radius: 10px;
+            color: white;
+            font-size: 13px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            border-color: #10b981;
+        }
+
+        .btn-primary {
+            width: 100%;
+            background-color: #059669;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        .btn-primary:hover {
+            background-color: #047857;
+        }
+
+        .btn-primary:active {
+            transform: scale(0.99);
+        }
+
+        .info-box {
+            background-color: rgba(15, 23, 42, 0.4);
+            border: 1px solid rgba(30, 41, 59, 0.6);
+            padding: 15px;
+            border-radius: 16px;
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 20px;
+            line-height: 1.5;
+        }
+
+        .info-box strong {
+            color: #e2e8f0;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #1e293b;
+            margin-bottom: 15px;
+        }
+
+        .btn-danger {
+            background-color: rgba(244, 63, 94, 0.1);
+            color: #f43f5e;
+            border: 1px solid rgba(244, 63, 94, 0.2);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-danger:hover {
+            background-color: #f43f5e;
+            color: white;
+        }
+
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        th {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #94a3b8;
+            padding: 12px;
+            background-color: rgba(2, 6, 23, 0.4);
+            font-weight: bold;
+        }
+
+        td {
+            padding: 14px 12px;
+            border-bottom: 1px solid rgba(30, 41, 59, 0.5);
+        }
+
+        tr:hover td {
+            background-color: rgba(30, 41, 59, 0.2);
+        }
+
+        .badge {
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .badge-active {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .badge-expired {
+            background-color: rgba(244, 63, 94, 0.1);
+            color: #f43f5e;
+            border: 1px solid rgba(244, 63, 94, 0.2);
+        }
+
+        .actions {
+            display: flex;
+            gap: 6px;
+            justify-content: flex-end;
+        }
+
+        .btn-action {
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .btn-whatsapp {
+            background-color: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-whatsapp:hover {
+            background-color: #10b981;
+            color: white;
+        }
+
+        .btn-key {
+            background-color: #1e293b;
+            color: #cbd5e1;
+            border: 1px solid #334155;
+        }
+
+        .btn-key:hover {
+            background-color: #334155;
+        }
+
+        .btn-del {
+            background-color: #1e293b;
+            color: #f43f5e;
+            border: 1px solid transparent;
+        }
+
+        .btn-del:hover {
+            background-color: rgba(244, 63, 94, 0.15);
+            border-color: rgba(244, 63, 94, 0.3);
+        }
+
+        .empty-state {
+            padding: 40px;
+            text-align: center;
+            color: #64748b;
+        }
+
+        .empty-state p {
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        #toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #059669;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: bold;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+            transform: translateY(100px);
+            opacity: 0;
+            z-index: 1000;
+        }
+
+        #toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
-    <div class="card">
-        <!-- Logo corrigida -->
-        <img src="ChatGPT Image 12 de jul. de 2026, 13_03_09 (1).png" alt="Logo Lite" class="logo-login">
-        
-        <h3 id="tituloAcesso">Carregando...</h3>
-        
-        <div id="divChave" class="form-group hidden">
-            <label>Chave de Ativação</label>
-            <input type="text" id="inputChave" class="input-field" placeholder="Insira sua chave...">
+
+    <div id="telaLogin">
+        <div class="login-card">
+            <div class="login-logo">🎛️</div>
+            <h2>ZapFácil <span>Admin</span></h2>
+            <p>Área restrita. Insira a senha de acesso.</p>
+            
+            <div class="form-group" style="text-align: left;">
+                <label>Senha Master</label>
+                <input id="senhaMaster" type="password" placeholder="Digite sua senha..." onkeydown="if(event.key === 'Enter') verificarLogin()">
+            </div>
+            
+            <button onclick="verificarLogin()" class="btn-primary" style="margin-top: 5px;">
+                🔓 Entrar no Painel
+            </button>
         </div>
-        <div class="form-group">
-            <label id="labelSenha">Senha de Acesso</label>
-            <input type="password" id="inputSenha" class="input-field" placeholder="Sua senha...">
-        </div>
-        <button class="btn-login" onclick="processarAcesso()">CONFIRMAR</button>
     </div>
+
+    <div id="conteudoPainel">
+        <header>
+            <div class="header-container">
+                <div class="logo-area">
+                    <div class="logo-icon">🎛️</div>
+                    <div class="logo-text">
+                        <h1>ZapFácil <span>Admin</span></h1>
+                        <p>Controle de Licenças, Clientes e Faturamento</p>
+                    </div>
+                </div>
+                <div class="stats-area">
+                    <div class="stat-card">
+                        <span class="title">Clientes</span>
+                        <span id="statClientes" class="value">0</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="title">Faturamento</span>
+                        <span id="statFaturamento" class="value green">R$ 0,00</span>
+                    </div>
+                    <button onclick="fazerLogout()" class="btn-logout">
+                        🚪 Sair
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+                <div class="card">
+                    <div class="card-title">
+                        <span>🔑</span> Gerar Nova Licença
+                    </div>
+
+                    <div class="form-group">
+                        <label>Nome do Cliente</label>
+                        <input id="nomeCliente" type="text" placeholder="Ex: João da Silva">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Telefone / WhatsApp</label>
+                        <input id="telCliente" type="text" placeholder="Ex: 5511999999999 (Apenas números)">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Plano / Período</label>
+                        <select id="tipoPlano" onchange="alternarData()">
+                            <option value="mensal">📅 Aluguel Mensal (30 dias) - R$ 20</option>
+                            <option value="personalizado">⚙️ Validade Personalizada</option>
+                            <option value="vitalicio">💎 Acesso Vitalício (Até 2099)</option>
+                        </select>
+                    </div>
+
+                    <div id="containerData" class="form-group hidden">
+                        <label>Data Limite</label>
+                        <input id="dataLimite" type="date">
+                    </div>
+
+                    <button onclick="processarGeracao()" class="btn-primary">
+                        ⚡ Criar e Salvar Licença
+                    </button>
+                </div>
+
+                <div class="info-box">
+                    <strong>ℹ️ Como funciona o Banco de Dados?</strong>
+                    Todos os clientes salvos ficam guardados na memória local deste navegador (localStorage). Você pode fechar a página e abrir de novo que os dados continuarão aqui!
+                </div>
+            </div>
+
+            <div>
+                <div class="card" style="padding: 0; overflow: hidden;">
+                    <div class="table-header" style="padding: 20px; margin-bottom: 0;">
+                        <div style="display: flex; align-items: center; gap: 8px; font-weight: bold;">
+                            <span>👥</span> Clientes Cadastrados
+                        </div>
+                        <button onclick="limparTudo()" class="btn-danger">
+                            🗑️ Limpar Banco
+                        </button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="padding-left: 20px;">Cliente</th>
+                                    <th>WhatsApp</th>
+                                    <th>Vencimento</th>
+                                    <th>Status</th>
+                                    <th style="text-align: right; padding-right: 20px;">Ações de Envio</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelaClientes">
+                                </tbody>
+                        </table>
+                    </div>
+
+                    <div id="estadoVazio" class="empty-state">
+                        <div style="font-size: 30px; margin-bottom: 10px;">📂</div>
+                        <strong>Nenhum cliente cadastrado ainda.</strong>
+                        <p>Preencha o formulário ao lado para gerar a primeira licença comercial.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="toast">Copiado com sucesso!</div>
+
     <script>
-        const ID_SISTEMA = 'zap_lite';
-        function verificarEstado() {
-            if (localStorage.getItem(ID_SISTEMA + '_configurado')) {
-                document.getElementById('tituloAcesso').innerText = "Bem-vindo de volta!";
-                document.getElementById('labelSenha').innerText = "Digite sua senha";
+        // === CONTROLE DE ACESSO (SEGURANÇA) ===
+        // Se desejar mudar a senha do painel, altere o texto entre as aspas abaixo:
+        const SENHA_CORRETA = "admin123"; 
+
+        function verificarLogin() {
+            const senhaDigitada = document.getElementById('senhaMaster').value;
+            if (senhaDigitada === SENHA_CORRETA) {
+                sessionStorage.setItem('zapfacil_logado', 'true');
+                liberarPainel();
             } else {
-                document.getElementById('tituloAcesso').innerText = "Primeira Ativação";
-                document.getElementById('divChave').classList.remove('hidden');
+                alert("Senha incorreta! Tente novamente.");
+                document.getElementById('senhaMaster').value = '';
+                document.getElementById('senhaMaster').focus();
             }
         }
-        function processarAcesso() {
-            const senha = document.getElementById('inputSenha').value;
-            const chave = document.getElementById('inputChave').value;
-            if (localStorage.getItem(ID_SISTEMA + '_configurado')) {
-                if (senha === localStorage.getItem(ID_SISTEMA + '_senha')) {
-                    window.location.href = "home.html"; // Mude para o nome do seu arquivo principal
-                } else { alert("Senha incorreta."); }
+
+        function liberarPainel() {
+            document.getElementById('telaLogin').style.display = 'none';
+            document.getElementById('conteudoPainel').style.display = 'block';
+            renderizarTabela(); // Carrega a tabela assim que loga
+        }
+
+        function fazerLogout() {
+            sessionStorage.removeItem('zapfacil_logado');
+            window.location.reload(); // Recarrega e volta a bloquear
+        }
+
+        // Verifica se já estava logado na sessão atual ao carregar a página
+        if (sessionStorage.getItem('zapfacil_logado') === 'true') {
+            liberarPainel();
+        }
+
+        // === SISTEMA DO PAINEL DE LICENÇAS ===
+        let clientes = JSON.parse(localStorage.getItem('zapfacil_db')) || [];
+
+        const hoje = new Date();
+        hoje.setDate(hoje.getDate() + 1);
+        if(document.getElementById('dataLimite')) {
+            document.getElementById('dataLimite').min = hoje.toISOString().split('T')[0];
+            document.getElementById('dataLimite').value = hoje.toISOString().split('T')[0];
+        }
+
+        function alternarData() {
+            const tipo = document.getElementById('tipoPlano').value;
+            document.getElementById('containerData').classList.toggle('hidden', tipo !== 'personalizado');
+        }
+
+        function processarGeracao() {
+            const nomeInput = document.getElementById('nomeCliente');
+            const telInput = document.getElementById('telCliente');
+            const nome = nomeInput.value.trim();
+            let telefone = telInput.value.trim().replace(/[^0-9]/g, '');
+
+            if (!nome) {
+                alert("Por favor, digite o nome do cliente para identificação!");
+                return;
+            }
+
+            if (telefone.length === 11 || telefone.length === 10) {
+                telefone = '55' + telefone;
+            }
+
+            const tipo = document.getElementById('tipoPlano').value;
+            let ano, mes, dia, dataFormatadaVisivel;
+
+            if (tipo === 'mensal') {
+                const dataVenc = new Date();
+                dataVenc.setDate(dataVenc.getDate() + 30);
+                ano = dataVenc.getFullYear();
+                mes = String(dataVenc.getMonth() + 1).padStart(2, '0');
+                dia = String(dataVenc.getDate()).padStart(2, '0');
+                dataFormatadaVisivel = `${dia}/${mes}/${ano}`;
+            } else if (tipo === 'vitalicio') {
+                ano = "2099";
+                mes = "12";
+                dia = "31";
+                dataFormatadaVisivel = "Vitalício (2099)";
             } else {
-                if (chave && senha) {
-                    localStorage.setItem(ID_SISTEMA + '_configurado', 'true');
-                    localStorage.setItem(ID_SISTEMA + '_senha', senha);
-                    window.location.href = "home.html";
-                } else { alert("Preencha todos os campos."); }
+                const dataEscolhida = document.getElementById('dataLimite').value;
+                if (!dataEscolhida) {
+                    alert("Selecione uma data de vencimento!");
+                    return;
+                }
+                const partes = dataEscolhida.split('-');
+                ano = partes[0];
+                mes = partes[1];
+                dia = partes[2];
+                dataFormatadaVisivel = `${dia}/${mes}/${ano}`;
+            }
+
+            // === NOVA LÓGICA DE CHAVE ALEATÓRIA E ÚNICA ===
+            // Criamos um código aleatório de 4 letras/números para garantir que nunca repita
+            const caractersAleatorios = Math.random().toString(36).substring(2, 6).toUpperCase();
+            // Pegamos o milissegundo atual (últimos 4 dígitos) para diferenciar cadastros muito rápidos
+            const idTempo = Date.now().toString().slice(-4); 
+            
+            // Montamos a string original incluindo os dados temporais + elementos aleatórios
+            const stringOriginal = `ZAPFACIL-${ano}${mes}${dia}-${caractersAleatorios}${idTempo}`;
+            // Codificamos em Base64 para gerar a chave final "esquisita"
+            const chaveGerada = btoa(stringOriginal);
+            // ===============================================
+
+            const novoCliente = {
+                id: Date.now(),
+                nome: nome,
+                telefone: telefone || 'Não informado',
+                plano: tipo,
+                vencimentoOriginal: `${ano}-${mes}-${dia}`,
+                vencimentoVisivel: dataFormatadaVisivel,
+                chave: chaveGerada,
+                valorPago: tipo === 'vitalicio' ? 100 : 20
+            };
+
+            clientes.unshift(novoCliente);
+            salvarEAtualizar();
+            
+            nomeInput.value = '';
+            telInput.value = '';
+            
+            copiarTextoMensagem(novoCliente.nome, novoCliente.chave, novoCliente.vencimentoVisivel);
+            
+            if (novoCliente.telefone !== 'Não informado') {
+                const msgPronta = obterMensagemTexto(novoCliente.nome, novoCliente.chave, novoCliente.vencimentoVisivel);
+                window.open(`https://api.whatsapp.com/send?phone=${novoCliente.telefone}&text=${encodeURIComponent(msgPronta)}`, '_blank');
+                mostrarToast("Licença criada! Abrindo o WhatsApp...");
+            } else {
+                mostrarToast("Licença gerada e mensagem copiada!");
             }
         }
-        verificarEstado();
+
+        function salvarEAtualizar() {
+            localStorage.setItem('zapfacil_db', JSON.stringify(clientes));
+            renderizarTabela();
+        }
+
+        function renderizarTabela() {
+            if (sessionStorage.getItem('zapfacil_logado') !== 'true') return;
+
+            const tbody = document.getElementById('tabelaClientes');
+            const estadoVazio = document.getElementById('estadoVazio');
+            if(!tbody) return;
+            
+            tbody.innerHTML = '';
+
+            if (clientes.length === 0) {
+                estadoVazio.classList.remove('hidden');
+                document.getElementById('statClientes').innerText = '0';
+                document.getElementById('statFaturamento').innerText = 'R$ 0,00';
+                return;
+            }
+
+            estadoVazio.classList.add('hidden');
+            let faturamentoTotal = 0;
+            const dataAtual = new Date();
+
+            clientes.forEach(c => {
+                faturamentoTotal += c.valorPago;
+                
+                const dataVencObj = new Date(c.vencimentoOriginal + "T23:59:59");
+                const expirado = dataVencObj < dataAtual;
+
+                const statusBadge = expirado 
+                    ? `<span class="badge badge-expired">Expirado</span>`
+                    : `<span class="badge badge-active">Ativo</span>`;
+
+                const temTelefone = c.telefone && c.telefone !== 'Não informado';
+                const linkZap = temTelefone 
+                    ? `https://api.whatsapp.com/send?phone=${c.telefone}&text=${encodeURIComponent(obterMensagemTexto(c.nome, c.chave, c.vencimentoVisivel))}`
+                    : '#';
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="padding-left: 20px; font-weight: 600;">${c.nome}</td>
+                    <td style="color: #94a3b8; font-size: 12px;">${temTelefone ? '+' + c.telefone : '⚡ Sem número'}</td>
+                    <td style="font-family: monospace; color: #94a3b8;">${c.vencimentoVisivel}</td>
+                    <td>${statusBadge}</td>
+                    <td class="actions" style="padding-right: 20px;">
+                        <a href="${linkZap}" target="${temTelefone ? '_blank' : '_self'}" onclick="${temTelefone ? '' : `copiarMensagemEspecifica(${c.id}); return false;`}" class="btn-action btn-whatsapp">
+                            💬 Enviar Zap
+                        </a>
+                        <button onclick="copiarChaveDireta('${c.chave}')" class="btn-action btn-key" title="Copiar apenas a chave">
+                            🔑 Chave
+                        </button>
+                        <button onclick="removerCliente(${c.id})" class="btn-action btn-del">
+                            ❌
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('statClientes').innerText = clientes.length;
+            document.getElementById('statFaturamento').innerText = `R$ ${faturamentoTotal.toFixed(2).replace('.', ',')}`;
+        }
+
+        function obterMensagemTexto(nome, chave, vencimento) {
+            return `Olá, *${nome}*! 🚀\n\nObrigado pelo seu pagamento. Sua licença do aplicativo *ZapFácil* foi gerada com sucesso!\n\n📅 *Vencimento:* ${vencimento}\n🔑 *Chave de Ativação:*\n\n\`${chave}\`\n\n*Instruções:* Copie este código esquisito acima por inteiro, abra o seu aplicativo ZapFácil e cole no campo de bloqueio. Depois clique em "Ativar Sistema".`;
+        }
+
+        function copiarTextoMensagem(nome, chave, vencimento) {
+            const mensagem = obterMensagemTexto(nome, chave, vencimento);
+            navigator.clipboard.writeText(mensagem);
+        }
+
+        function copiarMensagemEspecifica(id) {
+            const c = clientes.find(item => item.id === id);
+            if(c) {
+                copiarTextoMensagem(c.nome, c.chave, c.vencimentoVisivel);
+                mostrarToast("Mensagem copiada! Cole no WhatsApp.");
+            }
+        }
+
+        function copiarChaveDireta(chave) {
+            navigator.clipboard.writeText(chave);
+            mostrarToast("Apenas o código foi copiado!");
+        }
+
+        function removerCliente(id) {
+            if(confirm("Deseja mesmo remover este cliente do seu histórico?")) {
+                clientes = clientes.filter(c => c.id !== id);
+                salvarEAtualizar();
+            }
+        }
+
+        function limparTudo() {
+            if(confirm("Deseja apagar todo o seu histórico local de clientes?")) {
+                clientes = [];
+                salvarEAtualizar();
+            }
+        }
+
+        function mostrarToast(texto) {
+            const toast = document.getElementById('toast');
+            toast.innerText = texto;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
     </script>
 </body>
 </html>
