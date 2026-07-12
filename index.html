@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acesso ZapFácil Lite</title>
+    <title>Acesso ZapFácil</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
         body { background-color: #f1f5f9; height: 100vh; display: flex; justify-content: center; align-items: center; }
@@ -20,20 +20,28 @@
 </head>
 <body>
     <div class="card">
-        <img src="ChatGPT Image 12 de jul. de 2026, 13_03_09 (1).png" alt="Logo Lite" class="logo-login">
+        <!-- COLOQUE O NOME DO ARQUIVO DA LOGO ABAIXO -->
+        <img src="NOME_DA_LOGO.png" alt="Logo" class="logo-login">
+        
         <h3 id="tituloAcesso">Carregando...</h3>
+        
         <div id="divChave" class="form-group hidden">
             <label>Chave de Ativação</label>
             <input type="text" id="inputChave" class="input-field" placeholder="Insira sua chave...">
         </div>
+
         <div class="form-group">
             <label id="labelSenha">Senha de Acesso</label>
             <input type="password" id="inputSenha" class="input-field" placeholder="Sua senha...">
         </div>
+
         <button class="btn-login" onclick="processarAcesso()">CONFIRMAR</button>
     </div>
+
     <script>
-        const ID_SISTEMA = 'zap_lite';
+        // MUDAR AQUI: use 'zap_lite' para o Lite e 'zap_pro' para o Pro
+        const ID_SISTEMA = 'zap_lite'; 
+
         function verificarEstado() {
             if (localStorage.getItem(ID_SISTEMA + '_configurado')) {
                 document.getElementById('tituloAcesso').innerText = "Bem-vindo de volta!";
@@ -43,17 +51,25 @@
                 document.getElementById('divChave').classList.remove('hidden');
             }
         }
+
         function processarAcesso() {
             const senha = document.getElementById('inputSenha').value;
             const chave = document.getElementById('inputChave').value;
+
             if (localStorage.getItem(ID_SISTEMA + '_configurado')) {
-                if (senha === localStorage.getItem(ID_SISTEMA + '_senha')) { alert("Acesso liberado!"); } else { alert("Senha incorreta."); }
+                if (senha === localStorage.getItem(ID_SISTEMA + '_senha')) {
+                    window.location.href = "index.html"; 
+                } else {
+                    alert("Senha incorreta.");
+                }
             } else {
                 if (chave && senha) {
                     localStorage.setItem(ID_SISTEMA + '_configurado', 'true');
                     localStorage.setItem(ID_SISTEMA + '_senha', senha);
-                    alert("Sistema ativado!"); window.location.reload();
-                } else { alert("Preencha todos os campos."); }
+                    window.location.href = "index.html";
+                } else {
+                    alert("Preencha todos os campos.");
+                }
             }
         }
         verificarEstado();
