@@ -2,373 +2,98 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ZapFácil Lite - Emissor Rápido</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <title>ZapFácil Lite | Login</title>
     <style>
-        .quebra-texto-cupom { white-space: normal !important; word-break: break-word !important; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+        body { background-color: #f1f5f9; height: 100vh; display: flex; justify-content: center; align-items: center; }
+        
+        .card { 
+            background-color: #ffffff; 
+            border: 1px solid #e2e8f0; 
+            padding: 40px; 
+            border-radius: 16px; 
+            width: 100%; 
+            max-width: 400px; 
+            text-align: center; 
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); 
+        }
+        
+        /* Ajuste a logo aqui - se o nome for diferente, altere o arquivo abaixo */
+        .logo-login { max-width: 200px; margin-bottom: 25px; }
+        
+        .form-group { text-align: left; margin-bottom: 15px; }
+        .form-group label { font-size: 11px; font-weight: bold; color: #64748b; margin-bottom: 5px; display: block; text-transform: uppercase; }
+        .input-field { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 10px; background: #f8fafc; font-size: 14px; }
+        
+        .btn-login { width: 100%; padding: 14px; background-color: #059669; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: background 0.2s; }
+        .btn-login:hover { background-color: #047857; }
+        
+        .hidden { display: none; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col justify-between antialiased">
+<body>
 
-    <!-- TELA DE AUTENTICAÇÃO (LOGIN / REGISTRO / RENOVAÇÃO) -->
-    <div id="authOverlay" class="fixed inset-0 bg-slate-900 z-[99999] flex items-center justify-center p-4" style="display: none;">
-        <div class="max-w-sm w-full bg-slate-800 rounded-xl shadow-2xl border border-slate-700 p-6 space-y-4 text-center">
-            
-            <!-- Logo na Tela de Login -->
-            <img src="ChatGPT Image 12 de jul. de 2026, 13_03_09 (1).png" alt="ZapFácil Lite" class="h-24 mx-auto object-contain bg-white rounded-xl p-2 shadow">
-
-            <!-- Formulário de Registro (Primeiro Acesso) -->
-            <div id="formRegistro" class="hidden space-y-3">
-                <h2 class="text-white font-bold text-lg">Criar Acesso</h2>
-                <p class="text-xs text-gray-400">Insira sua chave de ativação para criar sua senha.</p>
-                <input id="regChave" type="text" placeholder="Chave de Ativação" class="w-full p-2.5 rounded bg-slate-700 text-white border border-slate-600 text-sm outline-none text-center font-mono">
-                <input id="regPass" type="password" placeholder="Criar Senha de Acesso" class="w-full p-2.5 rounded bg-slate-700 text-white border border-slate-600 text-sm outline-none text-center">
-                <button onclick="registrarLite()" class="w-full bg-emerald-600 text-white font-bold py-3 rounded text-sm hover:bg-emerald-500 transition-colors uppercase tracking-wider">Cadastrar</button>
-            </div>
-
-            <!-- Formulário de Login -->
-            <div id="formLogin" class="hidden space-y-3">
-                <h2 class="text-white font-bold text-lg">Acessar Sistema</h2>
-                <input id="loginPass" type="password" placeholder="Sua Senha" class="w-full p-2.5 rounded bg-slate-700 text-white border border-slate-600 text-sm outline-none text-center">
-                <button onclick="entrarLite()" class="w-full bg-blue-600 text-white font-bold py-3 rounded text-sm hover:bg-blue-500 transition-colors uppercase tracking-wider">Entrar</button>
-                <button onclick="mostrarRenovacao()" class="text-xs text-gray-400 hover:text-white underline mt-3 block w-full">Licença expirada? Renovar aqui</button>
-            </div>
-
-            <!-- Formulário de Renovação -->
-            <div id="formRenovacao" class="hidden space-y-3">
-                <h2 class="text-red-400 font-bold text-lg">Licença Vencida</h2>
-                <p class="text-xs text-gray-400">Insira uma nova chave de ativação para continuar usando.</p>
-                <input id="renovarChave" type="text" placeholder="Nova Chave" class="w-full p-2.5 rounded bg-slate-700 text-white border border-slate-600 text-sm outline-none text-center font-mono">
-                <button onclick="renovarLite()" class="w-full bg-red-600 text-white font-bold py-3 rounded text-sm hover:bg-red-500 transition-colors uppercase tracking-wider">Ativar Nova Chave</button>
-                <button onclick="voltarLogin()" class="text-xs text-gray-400 hover:text-white underline mt-3 block w-full">Voltar para o Login</button>
+    <div class="card">
+        <!-- Substitua 'logo-lite.png' pelo nome exato do arquivo da logo do Lite -->
+        <img src="logo-lite.png" alt="ZapFácil Lite" class="logo-login">
+        
+        <h3 id="tituloAcesso" style="margin-bottom: 20px; color: #1e293b;">Carregando...</h3>
+        
+        <div id="camposAtivacao" class="hidden">
+            <div class="form-group">
+                <label>Chave de Ativação</label>
+                <input type="text" id="inputChave" class="input-field" placeholder="Insira sua chave...">
             </div>
         </div>
+
+        <div class="form-group">
+            <label id="labelSenha">Senha de Acesso</label>
+            <input type="password" id="inputSenha" class="input-field" placeholder="Sua senha...">
+        </div>
+
+        <button class="btn-login" onclick="processarAcesso()">ACESSAR SISTEMA</button>
     </div>
 
-    <!-- Cabeçalho do Sistema -->
-    <header class="bg-slate-800 text-white py-3 px-4 shadow-sm flex flex-col items-center sticky top-0 z-50">
-        <!-- Logo dentro do sistema -->
-        <img src="ChatGPT Image 12 de jul. de 2026, 13_03_09 (1).png" alt="ZapFácil Lite" class="h-10 mb-1 object-contain bg-white rounded p-1">
-        <p id="labelValidadeLicenca" class="text-[8px] text-slate-400 font-mono uppercase tracking-wide"></p>
-    </header>
-
-    <main class="max-w-5xl mx-auto p-3 w-full flex-grow grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
-        
-        <div class="space-y-3 w-full">
-            <section class="bg-white p-4 rounded-xl shadow-sm border space-y-3">
-                <h2 class="text-xs font-bold text-slate-700 uppercase tracking-wide border-b pb-1">🏢 Seus Dados</h2>
-                <div class="grid grid-cols-2 gap-2">
-                    <label class="bg-slate-100 text-slate-700 text-center text-[10px] font-bold p-1.5 rounded cursor-pointer border hover:bg-slate-200">
-                        📁 Logo do Cupom
-                        <input type="file" accept="image/*" onchange="processarLogoLite(this)" class="hidden">
-                    </label>
-                    <button onclick="removerLogoLite()" id="btnRemoverLogo" class="bg-red-50 text-red-500 text-[10px] p-1.5 rounded border border-red-100 hidden">✕ Remover Logo</button>
-                </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <input id="nomeEmpresa" type="text" placeholder="Seu Negócio" class="w-full text-xs px-2.5 py-2 rounded border outline-none focus:border-blue-500">
-                    <input id="telefoneEmpresa" type="text" placeholder="Telefone" class="w-full text-xs px-2.5 py-2 rounded border outline-none focus:border-blue-500">
-                </div>
-
-                <div class="pt-2 border-t space-y-2">
-                    <div class="flex gap-1">
-                        <select id="tipoChavePixLite" class="text-[11px] p-1 border bg-white font-bold w-16 outline-none focus:border-blue-500">
-                            <option value="CPF">CPF</option>
-                            <option value="Celular">Tel</option>
-                            <option value="Aleatória">Chave</option>
-                        </select>
-                        <input id="novaChavePixTxt" type="text" placeholder="Sua Chave Pix..." class="flex-grow text-xs px-2 py-1 border outline-none focus:border-blue-500">
-                        <button onclick="adicionarChavePixLiteColetor()" class="bg-slate-700 hover:bg-slate-800 text-white px-2 rounded text-xs transition-colors">➕</button>
-                    </div>
-                    <select id="selectChavesPixSalvas" onchange="alternarChavePixLiteAtiva()" class="w-full text-xs p-1.5 border bg-white focus:border-blue-500"></select>
-                </div>
-            </section>
-
-            <section class="bg-white p-4 rounded-xl shadow-sm border space-y-3">
-                <h2 class="text-xs font-bold text-slate-700 uppercase tracking-wide border-b pb-1">📝 Dados do Pedido</h2>
-                <input id="nomeCliente" type="text" placeholder="Nome do Cliente" class="w-full text-xs px-3 py-2.5 rounded border outline-none focus:border-blue-500">
-                <textarea id="nomeProduto" rows="2" placeholder="O que foi vendido? (Texto Livre)" class="w-full text-xs px-3 py-2 rounded border outline-none focus:border-blue-500"></textarea>
-                
-                <div class="grid grid-cols-2 gap-2">
-                    <input id="valorProduto" type="number" step="0.01" placeholder="Valor R$" class="w-full text-xs px-3 py-2.5 rounded border font-bold outline-none focus:border-blue-500">
-                    <select id="formaPagamento" class="w-full text-xs px-3 py-2.5 rounded border bg-white outline-none focus:border-blue-500">
-                        <option value="PIX">PIX</option>
-                        <option value="DINHEIRO">Dinheiro</option>
-                        <option value="CARTÃO">Cartão</option>
-                    </select>
-                </div>
-                <select id="statusPagamento" class="w-full text-xs px-3 py-2.5 rounded border font-bold bg-white text-center outline-none focus:border-blue-500">
-                    <option value="PAGO">🟢 RECEBIDO (Comprovante)</option>
-                    <option value="PENDENTE">🟡 EM ABERTO (Fatura)</option>
-                </select>
-
-                <button onclick="processarLite()" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 px-4 rounded-lg text-xs uppercase tracking-wider transition-all shadow-md">
-                    ⚡ GERAR COMPROVANTE
-                </button>
-            </section>
-        </div>
-
-        <div class="flex flex-col items-center space-y-3 w-full">
-            <div id="cupomContainer" class="bg-white p-4 shadow border border-slate-300 w-full max-w-[320px] text-slate-800 font-mono text-[11px] uppercase relative leading-relaxed text-left">
-                <div id="cupomBadge" class="text-center font-sans font-black text-[10px] py-0.5 rounded mb-3 text-white bg-slate-700">COMPROVANTE DE PAGAMENTO</div>
-                <div id="cupomLogoContainer" class="hidden justify-center items-center w-full mb-2"><img id="cupomLogo" src="" class="max-h-12 max-w-[130px] object-contain mx-auto block"></div>
-                <div id="cupomEmpresa" class="font-bold text-center text-xs">EMISSOR LITE</div>
-                <div id="cupomTelefone" class="text-center text-[9px] text-slate-500 hidden"></div>
-                <div class="border-b border-dashed border-slate-400 my-1.5"></div>
-                <div class="flex justify-between text-[9px] text-slate-500"><span id="cupomData">DATA: --/--/----</span><span id="cupomHora">HORA: --:--</span></div>
-                <div class="border-b border-dashed border-slate-400 my-1.5"></div>
-                <div class="text-[9px] text-slate-400">CLIENTE:</div>
-                <div id="cupomCliente" class="font-bold text-slate-900 max-w-full quebra-texto-cupom">CONSUMIDOR</div>
-                <div class="border-b border-dashed border-slate-400 my-1.5"></div>
-                
-                <div class="flex justify-between font-bold mb-1"><span>ITEM</span><span class="text-right">VALOR</span></div>
-                <div class="flex justify-between gap-4 items-start">
-                    <span id="cupomProduto" class="quebra-texto-cupom text-slate-700 font-medium">NENHUM LANÇADO</span>
-                    <span id="cupomValor" class="font-bold whitespace-nowrap text-right">R$ 0,00</span>
-                </div>
-                
-                <div class="border-b border-dashed border-slate-400 my-1.5"></div>
-                <div class="flex justify-between text-slate-700"><span id="cupomForm">PAGAMENTO: -</span><span id="cupomValorForma">R$ 0,00</span></div>
-                <div id="linhaCupomPix" class="bg-emerald-50 text-emerald-900 p-1.5 rounded border border-emerald-200 my-1 hidden text-[9px]">
-                    <span class="font-bold block text-[7px] text-emerald-700">PIX:</span>
-                    <span id="cupomChavePixTxt" class="font-mono break-all font-bold">--</span>
-                </div>
-                <div class="border-t border-dashed border-slate-300 my-1"></div>
-                <div class="flex justify-between text-xs font-black text-slate-900"><span>TOTAL</span><span id="cupomTotal" class="text-sm">R$ 0,00</span></div>
-                <div class="border-b border-dashed border-slate-400 my-1.5"></div>
-                <div class="text-[9px] text-center text-slate-400 font-bold tracking-widest">*** OBRIGADO ***</div>
-            </div>
-
-            <div class="w-full max-w-[320px] space-y-2 px-1">
-                <div id="containerPixExterno" class="bg-emerald-50 border border-emerald-200 rounded-xl p-2.5 text-center hidden shadow-sm">
-                    <span class="block text-[9px] font-bold text-emerald-700 mb-0.5">Pix para cópia:</span>
-                    <div id="txtPixExterno" class="bg-white border p-1 rounded text-xs font-mono break-all select-all font-bold text-slate-800 cursor-pointer hover:bg-slate-50"></div>
-                </div>
-                <button id="btnEnviar" onclick="enviarLite()" class="w-full bg-gray-300 text-gray-500 cursor-not-allowed font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider shadow transition-colors" disabled>🚀 Enviar p/ WhatsApp</button>
-            </div>
-        </div>
-    </main>
-
     <script>
-        // ==========================================
-        // SISTEMA DE AUTENTICAÇÃO E LICENÇA
-        // ==========================================
-        function isKeyValid(ch) {
-            if(!ch) return false;
-            try {
-                const dec = atob(ch); 
-                if(!dec.startsWith("ZAPFACIL-")) return false;
-                const ds = dec.split("-")[1];
-                const dV = new Date(parseInt(ds.substring(0,4)), parseInt(ds.substring(4,6))-1, parseInt(ds.substring(6,8)), 23,59,59);
-                return new Date() <= dV;
-            } catch(e) { return false; }
-        }
+        // Verifica se já existe uma senha salva para o Lite
+        const configurado = localStorage.getItem('zap_lite_configurado');
 
-        function getValidade(ch) {
-            try {
-                const dec = atob(ch);
-                const ds = dec.split("-")[1];
-                return `Validade: ${ds.substring(6,8)}/${ds.substring(4,6)}/${ds.substring(0,4)}`;
-            } catch(e) { return ""; }
-        }
-
-        function verificarAuth() {
-            const overlay = document.getElementById('authOverlay');
-            const fReg = document.getElementById('formRegistro');
-            const fLog = document.getElementById('formLogin');
-            const fRen = document.getElementById('formRenovacao');
-
-            fReg.classList.add('hidden'); 
-            fLog.classList.add('hidden'); 
-            fRen.classList.add('hidden');
-
-            const chave = localStorage.getItem('lite_licenca_chave');
-            const pass = localStorage.getItem('lite_pass');
-            const loggedIn = sessionStorage.getItem('lite_logged_in');
-
-            // 1. Sem registro completo -> Tela de Cadastro
-            if (!chave || !pass) {
-                overlay.style.display = 'flex';
-                fReg.classList.remove('hidden');
-                return false;
-            }
-
-            // 2. Chave vencida -> Tela de Renovação
-            if (!isKeyValid(chave)) {
-                overlay.style.display = 'flex';
-                fRen.classList.remove('hidden');
-                return false;
-            }
-
-            // 3. Chave válida e tem senha. Já fez login na sessão atual?
-            if (loggedIn === 'true') {
-                overlay.style.display = 'none';
-                document.getElementById('labelValidadeLicenca').innerText = getValidade(chave);
-                return true;
+        function atualizarTela() {
+            if (configurado) {
+                document.getElementById('tituloAcesso').innerText = "Bem-vindo de volta!";
+                document.getElementById('labelSenha').innerText = "Digite sua senha";
+                document.getElementById('camposAtivacao').classList.add('hidden');
             } else {
-                // Precisa fazer login
-                overlay.style.display = 'flex';
-                fLog.classList.remove('hidden');
-                return false;
+                document.getElementById('tituloAcesso').innerText = "Ativação Lite";
+                document.getElementById('camposAtivacao').classList.remove('hidden');
             }
         }
 
-        function registrarLite() {
-            const k = document.getElementById('regChave').value.trim();
-            const p = document.getElementById('regPass').value.trim();
+        function processarAcesso() {
+            const senha = document.getElementById('inputSenha').value;
             
-            if(!k || !p) return alert("Preencha todos os campos para cadastrar!");
-            if(!isKeyValid(k)) return alert("Chave inválida ou expirada!");
-
-            localStorage.setItem('lite_licenca_chave', k);
-            localStorage.setItem('lite_pass', p);
-            sessionStorage.setItem('lite_logged_in', 'true');
-            
-            alert("Cadastro realizado com sucesso! Bem-vindo(a).");
-            window.location.reload();
-        }
-
-        function entrarLite() {
-            const p = document.getElementById('loginPass').value.trim();
-            
-            if(p === localStorage.getItem('lite_pass')) {
-                sessionStorage.setItem('lite_logged_in', 'true');
-                window.location.reload();
-            } else {
-                alert("Senha incorreta!");
-            }
-        }
-
-        function renovarLite() {
-            const k = document.getElementById('renovarChave').value.trim();
-            if(!isKeyValid(k)) return alert("Chave inválida ou expirada!");
-            
-            localStorage.setItem('lite_licenca_chave', k);
-            sessionStorage.setItem('lite_logged_in', 'true'); // Força login após renovar
-            alert("Licença renovada com sucesso!");
-            window.location.reload();
-        }
-
-        function mostrarRenovacao() {
-            document.getElementById('formLogin').classList.add('hidden');
-            document.getElementById('formRenovacao').classList.remove('hidden');
-        }
-
-        function voltarLogin() {
-            document.getElementById('formRenovacao').classList.add('hidden');
-            document.getElementById('formLogin').classList.remove('hidden');
-        }
-
-        // ==========================================
-        // FUNÇÕES DO SISTEMA (CUPOM)
-        // ==========================================
-        let chavePixCopiaMemoria = "";
-        
-        window.onload = function() {
-            if(verificarAuth()) {
-                if (localStorage.getItem('lite_nomeEmpresa')) document.getElementById('nomeEmpresa').value = localStorage.getItem('lite_nomeEmpresa');
-                if (localStorage.getItem('lite_telefoneEmpresa')) document.getElementById('telefoneEmpresa').value = localStorage.getItem('lite_telefoneEmpresa');
-                if (localStorage.getItem('lite_logoEmpresa')) {
-                    document.getElementById('cupomLogo').src = localStorage.getItem('lite_logoEmpresa');
-                    document.getElementById('cupomLogoContainer').classList.replace('hidden', 'flex');
-                    document.getElementById('btnRemoverLogo').classList.remove('hidden');
+            if (!configurado) {
+                const chave = document.getElementById('inputChave').value;
+                if (chave && senha) {
+                    localStorage.setItem('zap_lite_configurado', 'true');
+                    localStorage.setItem('zap_lite_senha', senha);
+                    alert("Sistema Lite ativado!");
+                    window.location.reload();
+                } else {
+                    alert("Por favor, preencha a chave e a senha.");
                 }
-                atualizarSelectChavesPixLite();
+            } else {
+                const senhaSalva = localStorage.getItem('zap_lite_senha');
+                if (senha === senhaSalva) {
+                    alert("Acesso liberado!");
+                    // Redirecionar para o painel Lite aqui
+                } else {
+                    alert("Senha incorreta.");
+                }
             }
         }
 
-        function obterChavesPixLite() { return JSON.parse(localStorage.getItem('lite_listaPix') || '[]'); }
-        
-        function adicionarChavePixLiteColetor() {
-            const t = document.getElementById('tipoChavePixLite').value; const txt = document.getElementById('novaChavePixTxt').value.trim();
-            if(!txt) return; let c = obterChavesPixLite(); const f = `${t}: ${txt}`;
-            if(!c.includes(f)) { c.push(f); localStorage.setItem('lite_listaPix', JSON.stringify(c)); }
-            document.getElementById('novaChavePixTxt').value = ""; localStorage.setItem('lite_chaveAtiva', f);
-            atualizarSelectChavesPixLite();
-        }
-        
-        function atualizarSelectChavesPixLite() {
-            const ch = obterChavesPixLite(); const s = document.getElementById('selectChavesPixSalvas');
-            s.innerHTML = ch.length ? '' : '<option value="">Sem Pix Cadastrado</option>';
-            ch.forEach(c => { s.innerHTML += `<option value="${c}" ${c===localStorage.getItem('lite_chaveAtiva')?'selected':''}>${c}</option>`; });
-            if(s.value) localStorage.setItem('lite_chaveAtiva', s.value);
-        }
-        
-        function alternarChavePixLiteAtiva() { localStorage.setItem('lite_chaveAtiva', document.getElementById('selectChavesPixSalvas').value); }
-        
-        function processarLogoLite(input) {
-            if(input.files[0]) {
-                const r = new FileReader(); r.onload = function(e){
-                    localStorage.setItem('lite_logoEmpresa', e.target.result); document.getElementById('cupomLogo').src = e.target.result;
-                    document.getElementById('cupomLogoContainer').classList.replace('hidden', 'flex'); document.getElementById('btnRemoverLogo').classList.remove('hidden');
-                }; r.readAsDataURL(input.files[0]);
-            }
-        }
-        
-        function removerLogoLite() { localStorage.removeItem('lite_logoEmpresa'); document.getElementById('cupomLogoContainer').classList.replace('flex', 'hidden'); document.getElementById('btnRemoverLogo').classList.add('hidden'); }
-
-        function processarLite() {
-            if(!verificarAuth()) return;
-
-            const empresa = document.getElementById('nomeEmpresa').value.trim() || "PRESTADOR DE SERVIÇOS";
-            const telefone = document.getElementById('telefoneEmpresa').value.trim();
-            const chavePix = localStorage.getItem('lite_chaveAtiva') || "";
-            const cliente = document.getElementById('nomeCliente').value.trim() || "CONSUMIDOR PADRÃO";
-            const produto = document.getElementById('nomeProduto').value.trim();
-            const valorInput = document.getElementById('valorProduto').value.trim();
-            const formaPagto = document.getElementById('formaPagamento').value;
-            const status = document.getElementById('statusPagamento').value;
-
-            if (!produto || !valorInput) return alert("Preencha o serviço e o valor!");
-            localStorage.setItem('lite_nomeEmpresa', empresa); localStorage.setItem('lite_telefoneEmpresa', telefone);
-
-            document.getElementById('cupomEmpresa').innerText = empresa;
-            document.getElementById('cupomCliente').innerText = cliente;
-            document.getElementById('cupomProduto').innerText = produto;
-            document.getElementById('cupomValor').innerText = `R$ ${parseFloat(valorInput).toFixed(2)}`;
-            document.getElementById('cupomForm').innerText = `PAGTO: ${formaPagto}`;
-            document.getElementById('cupomValorForma').innerText = `R$ ${parseFloat(valorInput).toFixed(2)}`;
-            document.getElementById('cupomTotal').innerText = `R$ ${parseFloat(valorInput).toFixed(2)}`;
-            document.getElementById('cupomData').innerText = `DATA: ${new Date().toLocaleDateString('pt-BR')}`;
-            document.getElementById('cupomHora').innerText = `HORA: ${new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})}`;
-
-            const tel = document.getElementById('cupomTelefone'); if(telefone) { tel.innerText = `TEL: ${telefone}`; tel.classList.remove('hidden'); } else tel.classList.add('hidden');
-
-            const lPix = document.getElementById('linhaCupomPix'); const cExt = document.getElementById('containerPixExterno');
-            if (formaPagto === "PIX" && chavePix) {
-                document.getElementById('cupomChavePixTxt').innerText = chavePix; lPix.classList.remove('hidden');
-                const limpa = chavePix.includes(': ') ? chavePix.split(': ')[1] : chavePix;
-                document.getElementById('txtPixExterno').innerText = limpa; cExt.classList.remove('hidden');
-                chavePixCopiaMemoria = limpa;
-            } else { lPix.classList.add('hidden'); cExt.classList.add('hidden'); chavePixCopiaMemoria = ""; }
-
-            const b = document.getElementById('cupomBadge'); const btn = document.getElementById('btnEnviar');
-            if (status === "PAGO") { b.innerText = "COMPROVANTE DE PAGAMENTO"; b.className = "text-center font-sans font-black text-[10px] py-0.5 rounded mb-3 text-white bg-slate-700"; }
-            else { b.innerText = "FATURA DE SERVIÇO"; b.className = "text-center font-sans font-black text-[10px] py-0.5 rounded mb-3 text-amber-950 bg-amber-400"; }
-
-            btn.removeAttribute('disabled'); btn.className = "w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider shadow transition-colors";
-            document.getElementById('cupomContainer').scrollIntoView({ behavior: 'smooth' });
-            if (!localStorage.getItem('lite_logoEmpresa')) document.getElementById('cupomLogoContainer').classList.add('hidden');
-        }
-
-        function enviarLite() {
-            html2canvas(document.getElementById('cupomContainer'), { scale: 2 }).then(canvas => {
-                canvas.toBlob(blob => {
-                    const file = new File([blob], 'comprovante.png', { type: 'image/png' });
-                    let txt = chavePixCopiaMemoria ? `🔑 Segue chave Pix para cópia:\n\n${chavePixCopiaMemoria}` : "";
-                    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                        let sd = { files: [file] }; if(txt) sd.text = txt; navigator.share(sd);
-                    } else {
-                        try {
-                            navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]).then(() => {
-                                alert("Comprovante Copiado!"); if(txt) window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(txt)}`);
-                            });
-                        } catch(e) {}
-                    }
-                }, 'image/png');
-            });
-        }
+        atualizarTela();
     </script>
 </body>
 </html>
