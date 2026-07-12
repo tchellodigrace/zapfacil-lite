@@ -2,90 +2,61 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Login | ZapFácil Lite</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acesso ZapFácil Lite</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
         body { background-color: #f1f5f9; height: 100vh; display: flex; justify-content: center; align-items: center; }
-        
-        .card { 
-            background-color: #ffffff; 
-            border: 1px solid #e2e8f0; 
-            padding: 40px; 
-            border-radius: 16px; 
-            width: 100%; 
-            max-width: 400px; 
-            text-align: center; 
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); 
-        }
-        
+        .card { background-color: #ffffff; border: 1px solid #e2e8f0; padding: 40px; border-radius: 16px; width: 100%; max-width: 400px; text-align: center; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); }
         .logo-login { max-width: 220px; margin-bottom: 30px; display: block; margin-left: auto; margin-right: auto; }
-        
         .form-group { text-align: left; margin-bottom: 20px; }
         .form-group label { font-size: 11px; font-weight: 800; color: #475569; margin-bottom: 8px; display: block; text-transform: uppercase; letter-spacing: 0.5px; }
-        
-        .input-field { 
-            width: 100%; 
-            padding: 12px 16px; 
-            border: 1px solid #cbd5e1; 
-            border-radius: 10px; 
-            background: #f8fafc; 
-            font-size: 14px;
-            color: #1e293b;
-        }
-        
-        .btn-login { 
-            width: 100%; 
-            padding: 14px; 
-            background-color: #059669; 
-            color: white; 
-            border: none; 
-            border-radius: 10px; 
-            font-weight: bold; 
-            cursor: pointer; 
-            text-transform: uppercase; 
-            font-size: 14px;
-            transition: background 0.2s; 
-        }
+        .input-field { width: 100%; padding: 12px 16px; border: 1px solid #cbd5e1; border-radius: 10px; background: #f8fafc; font-size: 14px; color: #1e293b; }
+        .btn-login { width: 100%; padding: 14px; background-color: #059669; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 14px; }
         .btn-login:hover { background-color: #047857; }
-        
         h3 { color: #1e293b; margin-bottom: 25px; font-size: 18px; }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
-
     <div class="card">
-        <!-- Logo do Lite vinculada corretamente -->
-        <img src="ChatGPT Image 12 de jul. de 2026, 13_03_09 (1).png" alt="ZapFácil Lite" class="logo-login">
-        
-        <h3 id="tituloAcesso">Primeira Ativação</h3>
-        
-        <div class="form-group">
+        <img src="ChatGPT Image 12 de jul. de 2026, 13_03_09 (1).png" alt="Logo Lite" class="logo-login">
+        <h3 id="tituloAcesso">Carregando...</h3>
+        <div id="divChave" class="form-group hidden">
             <label>Chave de Ativação</label>
             <input type="text" id="inputChave" class="input-field" placeholder="Insira sua chave...">
         </div>
-
         <div class="form-group">
-            <label>Definir Senha de Acesso</label>
+            <label id="labelSenha">Senha de Acesso</label>
             <input type="password" id="inputSenha" class="input-field" placeholder="Sua senha...">
         </div>
-
         <button class="btn-login" onclick="processarAcesso()">CONFIRMAR</button>
     </div>
-
     <script>
-        function processarAcesso() {
-            const chave = document.getElementById('inputChave').value;
-            const senha = document.getElementById('inputSenha').value;
-            
-            if (chave && senha) {
-                localStorage.setItem('zap_lite_configurado', 'true');
-                localStorage.setItem('zap_lite_senha', senha);
-                alert("Acesso configurado com sucesso!");
-                window.location.reload();
+        const ID_SISTEMA = 'zap_lite';
+        function verificarEstado() {
+            if (localStorage.getItem(ID_SISTEMA + '_configurado')) {
+                document.getElementById('tituloAcesso').innerText = "Bem-vindo de volta!";
+                document.getElementById('labelSenha').innerText = "Digite sua senha";
             } else {
-                alert("Por favor, preencha todos os campos.");
+                document.getElementById('tituloAcesso').innerText = "Primeira Ativação";
+                document.getElementById('divChave').classList.remove('hidden');
             }
         }
+        function processarAcesso() {
+            const senha = document.getElementById('inputSenha').value;
+            const chave = document.getElementById('inputChave').value;
+            if (localStorage.getItem(ID_SISTEMA + '_configurado')) {
+                if (senha === localStorage.getItem(ID_SISTEMA + '_senha')) { alert("Acesso liberado!"); } else { alert("Senha incorreta."); }
+            } else {
+                if (chave && senha) {
+                    localStorage.setItem(ID_SISTEMA + '_configurado', 'true');
+                    localStorage.setItem(ID_SISTEMA + '_senha', senha);
+                    alert("Sistema ativado!"); window.location.reload();
+                } else { alert("Preencha todos os campos."); }
+            }
+        }
+        verificarEstado();
     </script>
 </body>
 </html>
