@@ -15,9 +15,8 @@
         }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col justify-center items-center p-4 antialiased">
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col justify-between antialiased">
 
-    <!-- BLOQUEIO DE MENSALIDADE ORIGINAL -->
     <div id="bloqueioAssinatura">
         <div class="max-w-xs p-5 bg-slate-900 rounded-xl border border-red-500/40 shadow-xl space-y-3">
             <span class="text-4xl">🔒</span>
@@ -28,199 +27,108 @@
         </div>
     </div>
 
-    <!-- 1. TELA DE LOGIN PROTEGIDA -->
-    <div id="areaLogin" class="w-full max-w-md p-6 bg-slate-900 rounded-2xl border border-slate-800 shadow-2xl space-y-4">
-        <div class="text-center">
-            <h1 class="text-2xl font-black text-white tracking-wide">⚡ ZapFácil Lite</h1>
-            <p class="text-xs text-slate-400 mt-1">Insira suas credenciais para acessar o emissor</p>
-        </div>
-        <div class="space-y-3">
-            <div>
-                <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">E-mail de Acesso</label>
-                <input id="loginEmail" type="email" placeholder="seuemail@gmail.com" class="w-full p-2.5 rounded-lg bg-slate-800 text-white border border-slate-700 text-sm outline-none focus:border-emerald-500">
-            </div>
-            <div>
-                <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Senha</label>
-                <input id="loginSenha" type="password" placeholder="••••••••" class="w-full p-2.5 rounded-lg bg-slate-800 text-white border border-slate-700 text-sm outline-none focus:border-emerald-500">
-            </div>
-            <button onclick="executarLogin()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-lg text-xs uppercase tracking-wider transition-all shadow-lg">Entrar no Sistema</button>
-        </div>
-    </div>
+    <header class="bg-slate-800 text-white py-3 px-4 shadow-sm text-center sticky top-0 z-50">
+        <h1 class="text-base font-bold flex justify-center items-center gap-1">⚡ ZapFácil Lite</h1>
+        <p id="labelValidadeLicenca" class="text-[8px] text-slate-400 font-mono uppercase tracking-wide"></p>
+    </header>
 
-    <!-- 2. ÁREA PROTEGIDA DO SISTEMA -->
-    <div id="areaSistema" class="w-full max-w-6xl space-y-4 hidden">
+    <main class="max-w-5xl mx-auto p-3 w-full flex-grow grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
         
-        <!-- Topo Administrativo -->
-        <div class="flex flex-col sm:flex-row justify-between items-center gap-4 bg-slate-900 p-4 rounded-xl border border-slate-800 shadow-md">
-            <div>
-                <h1 class="text-base font-bold text-white flex items-center gap-2">
-                    ZapFácil Lite - Emissor Rápido <span class="text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 font-medium">Ativo</span>
-                </h1>
-                <p class="text-xs text-slate-400 mt-0.5">Sistema operando normalmente</p>
-            </div>
-            <div class="flex items-center gap-2">
-                <div class="bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 flex items-center gap-2 text-xs font-medium text-slate-200">
-                    <span>👤</span>
-                    <span id="labelUsuarioEmail">...</span>
+        <div class="space-y-3 w-full">
+            <section class="bg-white p-4 rounded-xl shadow-sm border space-y-3">
+                <h2 class="text-xs font-bold text-slate-700 uppercase tracking-wide border-b pb-1">🏢 Seus Dados</h2>
+                <div class="grid grid-cols-2 gap-2">
+                    <label class="bg-slate-100 text-slate-700 text-center text-[10px] font-bold p-1.5 rounded cursor-pointer border">
+                        📁 Logo
+                        <input type="file" accept="image/*" onchange="processarLogoLite(this)" class="hidden">
+                    </label>
+                    <button onclick="removerLogoLite()" id="btnRemoverLogo" class="bg-red-50 text-red-500 text-[10px] p-1.5 rounded border border-red-100 hidden">✕ Remover</button>
                 </div>
-                <button onclick="executarLogout()" class="bg-red-950/40 hover:bg-red-950/60 text-red-400 border border-red-900/50 px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 transition-all">
-                    Desconectar
-                </button>
-            </div>
-        </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <input id="nomeEmpresa" type="text" placeholder="Seu Negócio" class="w-full text-xs px-2.5 py-2 rounded border outline-none">
+                    <input id="telefoneEmpresa" type="text" placeholder="Telefone" class="w-full text-xs px-2.5 py-2 rounded border outline-none">
+                </div>
 
-        <!-- SEU SISTEMA ORIGINAL COMPLETO -->
-        <div class="bg-slate-50 text-slate-800 rounded-2xl p-4 md:p-6 shadow-xl border border-slate-200">
-            <header class="bg-slate-800 text-white py-3 px-4 shadow-sm text-center sticky top-0 z-50 rounded-xl mb-4">
-                <h1 class="text-base font-bold flex justify-center items-center gap-1">⚡ ZapFácil Lite</h1>
-                <p id="labelValidadeLicenca" class="text-[8px] text-slate-400 font-mono uppercase tracking-wide"></p>
-            </header>
-
-            <main class="max-w-5xl mx-auto w-full grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
-                <div class="space-y-3 w-full">
-                    <section class="bg-white p-4 rounded-xl shadow-sm border space-y-3">
-                        <h2 class="text-xs font-bold text-slate-700 uppercase tracking-wide border-b pb-1">🏢 Seus Dados</h2>
-                        <div class="grid grid-cols-2 gap-2">
-                            <label class="bg-slate-100 text-slate-700 text-center text-[10px] font-bold p-1.5 rounded cursor-pointer border">
-                                📁 Logo
-                                <input type="file" accept="image/*" onchange="processarLogoLite(this)" class="hidden">
-                            </label>
-                            <button onclick="removerLogoLite()" id="btnRemoverLogo" class="bg-red-50 text-red-500 text-[10px] p-1.5 rounded border border-red-100 hidden">✕ Remover</button>
-                        </div>
-                        <div class="grid grid-cols-2 gap-2">
-                            <input id="nomeEmpresa" type="text" placeholder="Seu Negócio" class="w-full text-xs px-2.5 py-2 rounded border outline-none">
-                            <input id="telefoneEmpresa" type="text" placeholder="Telefone" class="w-full text-xs px-2.5 py-2 rounded border outline-none">
-                        </div>
-
-                        <div class="pt-2 border-t space-y-2">
-                            <div class="flex gap-1">
-                                <select id="tipoChavePixLite" class="text-[11px] p-1 border bg-white font-bold w-16 outline-none">
-                                    <option value="CPF">CPF</option>
-                                    <option value="Celular">Tel</option>
-                                    <option value="Aleatória">Chave</option>
-                                </select>
-                                <input id="novaChavePixTxt" type="text" placeholder="Sua Chave Pix..." class="flex-grow text-xs px-2 py-1 border outline-none">
-                                <button onclick="adicionarChavePixLiteColetor()" class="bg-slate-700 text-white px-2 rounded text-xs">➕</button>
-                            </div>
-                            <select id="selectChavesPixSalvas" onchange="alternarChavePixLiteAtiva()" class="w-full text-xs p-1.5 border bg-white"></select>
-                        </div>
-                    </section>
-
-                    <section class="bg-white p-4 rounded-xl shadow-sm border space-y-3">
-                        <h2 class="text-xs font-bold text-slate-700 uppercase tracking-wide border-b pb-1">📝 Dados do Pedido</h2>
-                        <input id="nomeCliente" type="text" placeholder="Nome do Cliente" class="w-full text-xs px-3 py-2.5 rounded border outline-none">
-                        <textarea id="nomeProduto" rows="2" placeholder="O que foi vendido? (Texto Livre)" class="w-full text-xs px-3 py-2 rounded border outline-none"></textarea>
-                        
-                        <div class="grid grid-cols-2 gap-2">
-                            <input id="valorProduto" type="number" step="0.01" placeholder="Valor R$" class="w-full text-xs px-3 py-2.5 rounded border font-bold outline-none">
-                            <select id="formaPagamento" class="w-full text-xs px-3 py-2.5 rounded border bg-white outline-none">
-                                <option value="PIX">PIX</option>
-                                <option value="DINHEIRO">Dinheiro</option>
-                                <option value="CARTÃO">Cartão</option>
-                            </select>
-                        </div>
-                        <select id="statusPagamento" class="w-full text-xs px-3 py-2.5 rounded border font-bold bg-white text-center outline-none">
-                            <option value="PAGO">🟢 RECEBIDO (Comprovante)</option>
-                            <option value="PENDENTE">🟡 EM ABERTO (Fatura)</option>
+                <div class="pt-2 border-t space-y-2">
+                    <div class="flex gap-1">
+                        <select id="tipoChavePixLite" class="text-[11px] p-1 border bg-white font-bold w-16 outline-none">
+                            <option value="CPF">CPF</option>
+                            <option value="Celular">Tel</option>
+                            <option value="Aleatória">Chave</option>
                         </select>
-
-                        <button onclick="processarLite()" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 px-4 rounded-lg text-xs uppercase tracking-wider transition-all">
-                            ⚡ GERAR COMPROVANTE
-                        </button>
-                    </section>
-                </div>
-
-                <div class="flex flex-col items-center space-y-3 w-full">
-                    <div id="cupomContainer" class="bg-white p-4 shadow border border-slate-300 w-full max-w-[320px] text-slate-800 font-mono text-[11px] uppercase relative leading-relaxed text-left">
-                        <div id="cupomBadge" class="text-center font-sans font-black text-[10px] py-0.5 rounded mb-3 text-white bg-slate-700">COMPROVANTE DE PAGAMENTO</div>
-                        <div id="cupomLogoContainer" class="hidden justify-center items-center w-full mb-2"><img id="cupomLogo" src="" class="max-h-12 max-w-[130px] object-contain mx-auto block"></div>
-                        <div id="cupomEmpresa" class="font-bold text-center text-xs">EMISSOR LITE</div>
-                        <div id="cupomTelefone" class="text-center text-[9px] text-slate-500 hidden"></div>
-                        <div class="border-b border-dashed border-slate-400 my-1.5"></div>
-                        <div class="flex justify-between text-[9px] text-slate-500"><span id="cupomData">DATA: --/--/----</span><span id="cupomHora">HORA: --:--</span></div>
-                        <div class="border-b border-dashed border-slate-400 my-1.5"></div>
-                        <div class="text-[9px] text-slate-400">CLIENTE:</div>
-                        <div id="cupomCliente" class="font-bold text-slate-900 max-w-full quebra-texto-cupom">CONSUMIDOR</div>
-                        <div class="border-b border-dashed border-slate-400 my-1.5"></div>
-                        
-                        <div class="flex justify-between font-bold mb-1"><span>ITEM</span><span class="text-right">VALOR</span></div>
-                        <div class="flex justify-between gap-4 items-start">
-                            <span id="cupomProduto" class="quebra-texto-cupom text-slate-700 font-medium">NENHUM LANÇADO</span>
-                            <span id="cupomValor" class="font-bold whitespace-nowrap text-right">R$ 0,00</span>
-                        </div>
-                        
-                        <div class="border-b border-dashed border-slate-400 my-1.5"></div>
-                        <div class="flex justify-between text-slate-700"><span id="cupomForm">PAGAMENTO: -</span><span id="cupomValorForma">R$ 0,00</span></div>
-                        <div id="linhaCupomPix" class="bg-emerald-50 text-emerald-900 p-1.5 rounded border border-emerald-200 my-1 hidden text-[9px]">
-                            <span class="font-bold block text-[7px] text-emerald-700">PIX:</span>
-                            <span id="cupomChavePixTxt" class="font-mono break-all font-bold">--</span>
-                        </div>
-                        <div class="border-t border-dashed border-slate-300 my-1"></div>
-                        <div class="flex justify-between text-xs font-black text-slate-900"><span>TOTAL</span><span id="cupomTotal" class="text-sm">R$ 0,00</span></div>
-                        <div class="border-b border-dashed border-slate-400 my-1.5"></div>
-                        <div class="text-[9px] text-center text-slate-400 font-bold tracking-widest">*** OBRIGADO ***</div>
+                        <input id="novaChavePixTxt" type="text" placeholder="Sua Chave Pix..." class="flex-grow text-xs px-2 py-1 border outline-none">
+                        <button onclick="adicionarChavePixLiteColetor()" class="bg-slate-700 text-white px-2 rounded text-xs">➕</button>
                     </div>
-
-                    <div class="w-full max-w-[320px] space-y-2 px-1">
-                        <div id="containerPixExterno" class="bg-emerald-50 border border-emerald-200 rounded-xl p-2.5 text-center hidden">
-                            <span class="block text-[9px] font-bold text-emerald-700 mb-0.5">Pix para cópia:</span>
-                            <div id="txtPixExterno" class="bg-white border p-1 rounded text-xs font-mono break-all select-all font-bold text-slate-800 cursor-pointer"></div>
-                        </div>
-                        <button id="btnEnviar" onclick="enviarLite()" class="w-full bg-gray-300 text-gray-500 cursor-not-allowed font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider shadow" disabled>🚀 Enviar p/ WhatsApp</button>
-                    </div>
+                    <select id="selectChavesPixSalvas" onchange="alternarChavePixLiteAtiva()" class="w-full text-xs p-1.5 border bg-white"></select>
                 </div>
-            </main>
+            </section>
+
+            <section class="bg-white p-4 rounded-xl shadow-sm border space-y-3">
+                <h2 class="text-xs font-bold text-slate-700 uppercase tracking-wide border-b pb-1">📝 Dados do Pedido</h2>
+                <input id="nomeCliente" type="text" placeholder="Nome do Cliente" class="w-full text-xs px-3 py-2.5 rounded border outline-none">
+                <textarea id="nomeProduto" rows="2" placeholder="O que foi vendido? (Texto Livre)" class="w-full text-xs px-3 py-2 rounded border outline-none"></textarea>
+                
+                <div class="grid grid-cols-2 gap-2">
+                    <input id="valorProduto" type="number" step="0.01" placeholder="Valor R$" class="w-full text-xs px-3 py-2.5 rounded border font-bold outline-none">
+                    <select id="formaPagamento" class="w-full text-xs px-3 py-2.5 rounded border bg-white outline-none">
+                        <option value="PIX">PIX</option>
+                        <option value="DINHEIRO">Dinheiro</option>
+                        <option value="CARTÃO">Cartão</option>
+                    </select>
+                </div>
+                <select id="statusPagamento" class="w-full text-xs px-3 py-2.5 rounded border font-bold bg-white text-center outline-none">
+                    <option value="PAGO">🟢 RECEBIDO (Comprovante)</option>
+                    <option value="PENDENTE">🟡 EM ABERTO (Fatura)</option>
+                </select>
+
+                <button onclick="processarLite()" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 px-4 rounded-lg text-xs uppercase tracking-wider transition-all">
+                    ⚡ GERAR COMPROVANTE
+                </button>
+            </section>
         </div>
-    </div>
+
+        <div class="flex flex-col items-center space-y-3 w-full">
+            <div id="cupomContainer" class="bg-white p-4 shadow border border-slate-300 w-full max-w-[320px] text-slate-800 font-mono text-[11px] uppercase relative leading-relaxed text-left">
+                <div id="cupomBadge" class="text-center font-sans font-black text-[10px] py-0.5 rounded mb-3 text-white bg-slate-700">COMPROVANTE DE PAGAMENTO</div>
+                <div id="cupomLogoContainer" class="hidden justify-center items-center w-full mb-2"><img id="cupomLogo" src="" class="max-h-12 max-w-[130px] object-contain mx-auto block"></div>
+                <div id="cupomEmpresa" class="font-bold text-center text-xs">EMISSOR LITE</div>
+                <div id="cupomTelefone" class="text-center text-[9px] text-slate-500 hidden"></div>
+                <div class="border-b border-dashed border-slate-400 my-1.5"></div>
+                <div class="flex justify-between text-[9px] text-slate-500"><span id="cupomData">DATA: --/--/----</span><span id="cupomHora">HORA: --:--</span></div>
+                <div class="border-b border-dashed border-slate-400 my-1.5"></div>
+                <div class="text-[9px] text-slate-400">CLIENTE:</div>
+                <div id="cupomCliente" class="font-bold text-slate-900 max-w-full quebra-texto-cupom">CONSUMIDOR</div>
+                <div class="border-b border-dashed border-slate-400 my-1.5"></div>
+                
+                <div class="flex justify-between font-bold mb-1"><span>ITEM</span><span class="text-right">VALOR</span></div>
+                <div class="flex justify-between gap-4 items-start">
+                    <span id="cupomProduto" class="quebra-texto-cupom text-slate-700 font-medium">NENHUM LANÇADO</span>
+                    <span id="cupomValor" class="font-bold whitespace-nowrap text-right">R$ 0,00</span>
+                </div>
+                
+                <div class="border-b border-dashed border-slate-400 my-1.5"></div>
+                <div class="flex justify-between text-slate-700"><span id="cupomForm">PAGAMENTO: -</span><span id="cupomValorForma">R$ 0,00</span></div>
+                <div id="linhaCupomPix" class="bg-emerald-50 text-emerald-900 p-1.5 rounded border border-emerald-200 my-1 hidden text-[9px]">
+                    <span class="font-bold block text-[7px] text-emerald-700">PIX:</span>
+                    <span id="cupomChavePixTxt" class="font-mono break-all font-bold">--</span>
+                </div>
+                <div class="border-t border-dashed border-slate-300 my-1"></div>
+                <div class="flex justify-between text-xs font-black text-slate-900"><span>TOTAL</span><span id="cupomTotal" class="text-sm">R$ 0,00</span></div>
+                <div class="border-b border-dashed border-slate-400 my-1.5"></div>
+                <div class="text-[9px] text-center text-slate-400 font-bold tracking-widest">*** OBRIGADO ***</div>
+            </div>
+
+            <div class="w-full max-w-[320px] space-y-2 px-1">
+                <div id="containerPixExterno" class="bg-emerald-50 border border-emerald-200 rounded-xl p-2.5 text-center hidden">
+                    <span class="block text-[9px] font-bold text-emerald-700 mb-0.5">Pix para cópia:</span>
+                    <div id="txtPixExterno" class="bg-white border p-1 rounded text-xs font-mono break-all select-all font-bold text-slate-800 cursor-pointer"></div>
+                </div>
+                <button id="btnEnviar" onclick="enviarLite()" class="w-full bg-gray-300 text-gray-500 cursor-not-allowed font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider shadow" disabled>🚀 Enviar p/ WhatsApp</button>
+            </div>
+        </div>
+    </main>
 
     <script>
-        // --- SISTEMA DE LOGIN E CONTROLE DE ACESSO (CORRIGIDO) ---
-        function verificarAutenticacao() {
-            const usuarioLogado = localStorage.getItem('zap_lite_usuario');
-            const areaLogin = document.getElementById('areaLogin');
-            const areaSistema = document.getElementById('areaSistema');
-            
-            if (usuarioLogado) {
-                if (areaLogin) areaLogin.classList.add('hidden');
-                if (areaSistema) areaSistema.classList.remove('hidden');
-                document.getElementById('labelUsuarioEmail').innerText = usuarioLogado;
-                
-                document.body.className = "bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col justify-start p-4 md:p-8 antialiased";
-                return true;
-            } else {
-                if (areaLogin) areaLogin.classList.remove('hidden');
-                if (areaSistema) areaSistema.classList.add('hidden');
-                
-                document.body.className = "bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col justify-center items-center p-4 antialiased";
-                return false;
-            }
-        }
-
-        function executarLogin() {
-            const email = document.getElementById('loginEmail').value.trim();
-            const senha = document.getElementById('loginSenha').value.trim();
-            
-            if (!email || !senha) {
-                alert("Preencha todos os campos!");
-                return;
-            }
-            
-            if (senha === "123456") { 
-                localStorage.setItem('zap_lite_usuario', email);
-                if(verificarAutenticacao()) {
-                    inicializarSistemaApp();
-                }
-            } else {
-                alert("Senha inválida ou incorreta!");
-            }
-        }
-
-        function executarLogout() {
-            localStorage.removeItem('zap_lite_usuario');
-            window.location.reload();
-        }
-
-        // --- SISTEMA ORIGINAL DO EMISSOR ---
         function checarLicencaValida() {
             const ch = localStorage.getItem('lite_licenca_chave') || "";
             const bloco = document.getElementById('bloqueioAssinatura');
@@ -235,20 +143,14 @@
                 return true;
             } catch(e) { bloco.style.display="flex"; return false; }
         }
+        
         function salvarNovaChave() {
             localStorage.setItem('lite_licenca_chave', document.getElementById('inputChaveRenovacao').value.trim());
-            if(checarLicencaValida()) window.location.reload(); else alert("Chave Expira ou Inválida!");
+            if(checarLicencaValida()) window.location.reload(); else alert("Chave de Ativação inválida ou expirada!");
         }
 
         let chavePixCopiaMemoria = "";
-        
         window.onload = function() {
-            if (verificarAutenticacao()) {
-                inicializarSistemaApp();
-            }
-        }
-
-        function inicializarSistemaApp() {
             checarLicencaValida();
             if (localStorage.getItem('lite_nomeEmpresa')) document.getElementById('nomeEmpresa').value = localStorage.getItem('lite_nomeEmpresa');
             if (localStorage.getItem('lite_telefoneEmpresa')) document.getElementById('telefoneEmpresa').value = localStorage.getItem('lite_telefoneEmpresa');
@@ -301,6 +203,7 @@
 
             document.getElementById('cupomEmpresa').innerText = empresa;
             document.getElementById('cupomCliente').innerText = cliente;
+            // Ajuste de quebra de texto perfeita na nota
             document.getElementById('cupomProduto').innerText = produto;
             document.getElementById('cupomValor').innerText = `R$ ${parseFloat(valorInput).toFixed(2)}`;
             document.getElementById('cupomForm').innerText = `PAGTO: ${formaPagto}`;
